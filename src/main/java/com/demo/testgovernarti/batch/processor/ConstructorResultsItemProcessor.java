@@ -1,7 +1,7 @@
 package com.demo.testgovernarti.batch.processor;
 
-  import com.demo.testgovernarti.entities.ConstructorResults;
-  import org.slf4j.Logger;
+import com.demo.testgovernarti.entities.ConstructorResults;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 
