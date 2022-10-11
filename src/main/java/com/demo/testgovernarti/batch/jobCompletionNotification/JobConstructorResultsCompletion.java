@@ -1,7 +1,6 @@
 package com.demo.testgovernarti.batch.jobCompletionNotification;
 
-
-import com.demo.testgovernarti.entities.Circuit;
+import com.demo.testgovernarti.entities.ConstructorResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -12,14 +11,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobCircuitCompletion extends JobExecutionListenerSupport {
+public class JobConstructorResultsCompletion extends JobExecutionListenerSupport {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JobCircuitCompletion.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobConstructorResultsCompletion.class);
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JobCircuitCompletion(JdbcTemplate jdbcTemplate) {
+    public JobConstructorResultsCompletion(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -28,20 +27,15 @@ public class JobCircuitCompletion extends JobExecutionListenerSupport {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JOB FINISHED! Time to verify the results");
 
-            String query = "SELECT id, circuitRef, name, location, country, lat, lng, alt, url FROM circuit";
-            jdbcTemplate.query(query, (rs, row) -> new Circuit(
+            String query = "SELECT id, raceId, constructorId, points, status FROM constructorresults";
+            jdbcTemplate.query(query, (rs, row) -> new ConstructorResults(
                     rs.getLong(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getString(4),
-                    rs.getString(5),
-                    rs.getDouble(6),
-                    rs.getDouble(7),
-                    rs.getString(8),
-                    rs.getString(9)
+                    rs.getLong(2),
+                    rs.getLong(3),
+                    rs.getDouble(4),
+                    rs.getString(5)
             ))
-                    .forEach(circuit -> LOGGER.info("Found < {} > in the database.", circuit));
+                    .forEach(constructorResults -> LOGGER.info("Found < {} > in the database.", constructorResults));
         }
     }
 }
-

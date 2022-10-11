@@ -1,7 +1,7 @@
 package com.demo.testgovernarti.batch.processor;
 
 import com.demo.testgovernarti.entities.Circuit;
- import org.slf4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 
@@ -14,18 +14,18 @@ public class CircuitItemProcessor implements ItemProcessor<Circuit, Circuit> {
     public Circuit process(final Circuit circuit) throws Exception {
 
 
-        var circuitId = circuit.getCircuitId();
-        String circuitRef = circuit.getCircuitRef();
-        String name = circuit.getName();
-        String location = circuit.getLocation();
-        String country = circuit.getCountry();
+        var id = circuit.getId();
+        var circuitRef = circuit.getCircuitRef();
+        var name = circuit.getName();
+        var location = circuit.getLocation();
+        var country = circuit.getCountry();
         var lat = circuit.getLat();
         var lng = circuit.getLng();
+        var url = circuit.getUrl();
         var alt = circuit.getAlt();
-        String url = circuit.getUrl();
 
         Circuit transformedCircuit = new Circuit(
-                circuitId,
+                id,
                 circuitRef,
                 name,
                 location,
