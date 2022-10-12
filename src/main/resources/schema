@@ -1,5 +1,5 @@
---drop TABLE IF EXISTS circuit;
---
+drop TABLE IF EXISTS circuit;
+
 create table if not exists "circuit"  (
     id bigint,
     circuitRef varchar(250),

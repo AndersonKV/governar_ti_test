@@ -3,6 +3,7 @@ package com.demo.testgovernarti.entities;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,20 +11,35 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
-@Table(name = "circuit")
 @Entity
+@Table(name = "circuit")
 public class Circuit {
     @Id
     private Long id;
-    private String circuit_ref;
-    private String name;
-    private String location;
-    private String country;
-    private Double lat;
-    private Double lng;
-    private String alt;
-    private String url;
 
+    @Column(name="circuit_ref")
+    private String circuit_ref;
+
+    @Column(name="name")
+    private String name;
+
+    @Column(name="location")
+    private String location;
+
+    @Column(name="country")
+    private String country;
+
+    @Column(name="lat")
+    private Double lat;
+
+    @Column(name="lng")
+    private Double lng;
+
+    @Column(name="alt")
+    private String alt;
+
+    @Column(name="url")
+    private String url;
 
 
     public Circuit() {
