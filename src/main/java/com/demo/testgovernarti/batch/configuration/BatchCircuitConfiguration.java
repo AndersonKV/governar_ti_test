@@ -1,14 +1,13 @@
 package com.demo.testgovernarti.batch.configuration;
 
 import com.demo.testgovernarti.batch.jobCompletionNotification.JobCircuitCompletion;
-import com.demo.testgovernarti.batch.jobCompletionNotification.JobConstructorResultsCompletion;
 import com.demo.testgovernarti.batch.jobCompletionNotification.JobConstructorStandingsCompletion;
 import com.demo.testgovernarti.batch.processor.CircuitItemProcessor;
-import com.demo.testgovernarti.batch.processor.ConstructorResultsItemProcessor;
 import com.demo.testgovernarti.batch.processor.ConstructorStandingsItemProcessor;
+import com.demo.testgovernarti.batch.processor.ConstructorsItemProcessor;
 import com.demo.testgovernarti.entities.Circuit;
-import com.demo.testgovernarti.entities.ConstructorResults;
 import com.demo.testgovernarti.entities.ConstructorStandings;
+import com.demo.testgovernarti.entities.Constructors;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -26,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.sql.DataSource;
 
@@ -41,99 +39,97 @@ public class BatchCircuitConfiguration {
     public StepBuilderFactory stepBuilderFactory;
 
     @Value("${file.circuits}")
-    private String fileInput;
+    private String fileInputCircuits;
 
-    @Value("${file.constructorResultsId}")
-    private String fileInputContructor;
+    @Value("${file.constructor_results}")
+    private String fileInputConstructorResults;
 
     @Value("${file.constructor_standings}")
     private String fileInputConstructorStandings;
 
+    @Value("${file.constructors}")
+    private String fileInputConstructors;
 
-    private Integer threadPoolSize = 20;
+    /**************************************************
 
-    private Integer threadCorePoolSize = 5;
+     INICIO CIRCUIT
 
-    private Integer threadQueuePoolSize = 5;
+     **************************************************
+     */
 
-    private Integer chunkSize = 2;
+    @Bean
+    public FlatFileItemReader<Circuit> circuitReader() {
+        return new FlatFileItemReaderBuilder<Circuit>().name("circuitItemReader")
+                .resource(new ClassPathResource(fileInputCircuits))
+                .delimited()
+                .names("id",
+                        "circuit_ref",
+                        "name",
+                        "location",
+                        "country",
+                        "lat",
+                        "lng",
+                        "alt",
+                        "url")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Circuit>() {{
+                    setTargetType(Circuit.class);
+                }})
+                .build();
 
-    /*====== INICIO CIRCUIT=======*/
-//
+    }
+
+    @Bean
+    public CircuitItemProcessor processorCircuit() { return new CircuitItemProcessor(); };
+
+    @Bean
+    public JdbcBatchItemWriter<Circuit> circuitWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Circuit>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO circuit (id, circuit_ref, name,location, country, lat, lng, alt, url) VALUES " +
+                        "(:id, :circuit_ref, :name,:location, :country, :lat, :lng, :alt, :url)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step1(JdbcBatchItemWriter<Circuit> writer) {
+        return stepBuilderFactory.get("step1")
+                .<Circuit, Circuit>chunk(10)
+                .reader(circuitReader())
+                .processor(processorCircuit())
+                .writer(writer)
+                .build();
+    }
+
+
+
+
+    @Bean
+    public Job job1(JobCircuitCompletion listener, Step step1) {
+        return jobBuilderFactory.get("job1")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step1)
+                .end()
+                .build();
+    }
+
+    /**************************************************
+
+     INICIO CONSTRUCTOR_RESULTS
+
+     **************************************************
+     */
+
 //    @Bean
-//    public FlatFileItemReader<Circuit> circuitReader() {
-//        return new FlatFileItemReaderBuilder<Circuit>().name("circuitItemReader")
-//                .resource(new ClassPathResource(fileInput))
+//    public FlatFileItemReader<ConstructorResults> reader() {
+//        return new FlatFileItemReaderBuilder<ConstructorResults>().name("constructorResultsItemReader")
+//                .resource(new ClassPathResource(fileInputConstructorResults))
 //                .delimited()
 //                .names("id",
-//                        "circuitRef",
-//                        "name",
-//                        "location",
-//                        "country",
-//                        "lat",
-//                        "lng",
-//                        "alt",
-//                        "url")
-//                .fieldSetMapper(new BeanWrapperFieldSetMapper<Circuit>() {{
-//                    setTargetType(Circuit.class);
-//                }})
-//                .build();
-//
-//    }
-//    @Bean
-//    public CircuitItemProcessor processorCircuit() {
-//        return new CircuitItemProcessor();
-//    }
-//
-//
-//    @Bean
-//    public JdbcBatchItemWriter<Circuit> circuitWriter(DataSource dataSource) {
-//        return new JdbcBatchItemWriterBuilder<Circuit>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-//                .sql("INSERT INTO circuit (id, circuitRef, name,location, country, lat, lng, alt, url) VALUES " +
-//                        "(:id, :circuitRef, :name,:location, :country, :lat, :lng, :alt, :url)")
-//                .dataSource(dataSource)
-//                .build();
-//    }
-//
-//    @Bean
-//    public Step step1(JdbcBatchItemWriter<Circuit> writer) {
-//        return stepBuilderFactory.get("step1")
-//                .<Circuit, Circuit>chunk(10)
-//                .reader(circuitReader())
-//                .processor(processorCircuit())
-//                .writer(writer)
-//                .build();
-//    }
-//
-//
-//    @Bean
-//    public Job job1(JobCircuitCompletion listener, Step step1) {
-//        return jobBuilderFactory.get("job1")
-//                .incrementer(new RunIdIncrementer())
-//                .listener(listener)
-//                .flow(step1)
-//                .end()
-//                .build();
-//    }
-
-
-    /*====== FIM CIRCUIT=======*/
-
-
-
-    /*====== INICIO CONSTRUCTOR_RESULTS=======*/
-//
-//    @Bean
-//    public FlatFileItemReader<ConstructorResults> constructorResultsReader() {
-//        return new FlatFileItemReaderBuilder<ConstructorResults>().name("constructorResultsItemReader")
-//                .resource(new ClassPathResource(fileInputContructor))
-//                .delimited()
-//                .names(new String[]{
-//                        "id",
-//                        "raceId",
-//                        "constructorId",
+//                        "race_id",
+//                        "constructor_id",
 //                        "points",
-//                        "status"})
+//                        "status")
 //                .fieldSetMapper(new BeanWrapperFieldSetMapper<ConstructorResults>() {{
 //                    setTargetType(ConstructorResults.class);
 //                }})
@@ -141,31 +137,17 @@ public class BatchCircuitConfiguration {
 //
 //    }
 //
-//
 //    @Bean
-//    public ConstructorResultsItemProcessor processorConstructorResults() {
+//    public ConstructorResultsItemProcessor processor() {
 //        return new ConstructorResultsItemProcessor();
 //    }
 //
-//
 //    @Bean
-//    public JdbcBatchItemWriter<ConstructorResults> constructorWriter(DataSource dataSource) {
+//    public JdbcBatchItemWriter<ConstructorResults> writer(DataSource dataSource) {
 //        return new JdbcBatchItemWriterBuilder<ConstructorResults>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-//                .sql("INSERT INTO constructorresults (id, raceId, constructorId, points,status) VALUES " +
-//                        "(:id, :raceId, :constructorId,:points, :status)")
+//                .sql("INSERT INTO constructor_results (id, race_id, constructor_id, points,status) VALUES " +
+//                        "(:id, :race_id, :constructor_id,:points, :status)")
 //                .dataSource(dataSource)
-//                .build();
-//    }
-//
-//
-//
-//    @Bean
-//    public Step step2(JdbcBatchItemWriter<ConstructorResults> writer) {
-//        return stepBuilderFactory.get("step2")
-//                .<ConstructorResults, ConstructorResults>chunk(10)
-//                .reader(constructorResultsReader())
-//                .processor(processorConstructorResults())
-//                .writer(writer)
 //                .build();
 //    }
 //
@@ -178,10 +160,34 @@ public class BatchCircuitConfiguration {
 //                .end()
 //                .build();
 //    }
+//
+//    @Bean
+//    public Step step2(JdbcBatchItemWriter<ConstructorResults> writer) {
+//        return stepBuilderFactory.get("step2")
+//                .<ConstructorResults, ConstructorResults>chunk(12000)
+//                .reader(reader())
+//                .processor(processor())
+//                .writer(writer)
+//                .build();
+//    }
+//    @Bean
+//    public ThreadPoolTaskExecutor taskExecutor() {
+//        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+//        taskExecutor.setMaxPoolSize(threadPoolSize);
+//        taskExecutor.setCorePoolSize(threadCorePoolSize);
+//        taskExecutor.setQueueCapacity(threadQueuePoolSize);
+//        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+//        taskExecutor.afterPropertiesSet();
+//        return taskExecutor;
+//    }
 
-    /*====== FIM CONSTRUCTOR_RESULTS=======*/
+/**************************************************
 
-    /*=====INICIO CONSTRUCTOR_STANDINGS=======*/
+ INICIO CONSTRUCTOR_STANDINGS
+
+ **************************************************
+ */
+
 
     @Bean
     public FlatFileItemReader<ConstructorStandings> constructorStandingsReader() {
@@ -221,7 +227,7 @@ public class BatchCircuitConfiguration {
     @Bean
     public Step step3(JdbcBatchItemWriter<ConstructorStandings> writer) {
         return stepBuilderFactory.get("step3")
-                .<ConstructorStandings, ConstructorStandings>chunk(10)
+                .<ConstructorStandings, ConstructorStandings>chunk(12000)
                 .reader(constructorStandingsReader())
                 .processor(processorConstructorStandings())
                 .writer(writer)
@@ -241,20 +247,66 @@ public class BatchCircuitConfiguration {
 
 
 
+    /**************************************************
+
+     INICIO CONSTRUCTORS
+
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<Constructors> constructorsItemReader() {
+        return new FlatFileItemReaderBuilder<Constructors>().name("constructorsItemReader")
+                .resource(new ClassPathResource(fileInputConstructors))
+                .delimited()
+                .names("id",
+                        "constructor_ref",
+                        "name",
+                        "nationality",
+                        "url")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Constructors>() {{
+                    setTargetType(Constructors.class);
+                }})
+                .build();
+    }
 
 
 
-//    /*=====FIM CONSTRUCTOR_STANDINGS=======*/
+    @Bean
+    public ConstructorsItemProcessor constructorsItemProcessor() {
+        return new ConstructorsItemProcessor();
+    }
 
 
-//    @Bean
-//    public ThreadPoolTaskExecutor taskExecutor() {
-//        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-//        taskExecutor.setMaxPoolSize(threadPoolSize);
-//        taskExecutor.setCorePoolSize(threadCorePoolSize);
-//        taskExecutor.setQueueCapacity(threadQueuePoolSize);
-//        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
-//        taskExecutor.afterPropertiesSet();
-//        return taskExecutor;
-//    }
+    @Bean
+    public JdbcBatchItemWriter<Constructors> constructorsItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Constructors>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO constructors (id, constructor_ref, name, nationality,url) VALUES " +
+                        "(:id, :constructor_ref, :name, :nationality, :url)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step4(JdbcBatchItemWriter<Constructors> writer) {
+        return stepBuilderFactory.get("step4")
+                .<Constructors, Constructors>chunk(250)
+                .reader(constructorsItemReader())
+                .processor(constructorsItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job4(JobConstructorStandingsCompletion listener, Step step4) {
+        return jobBuilderFactory.get("job4")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step4)
+                .end()
+                .build();
+    }
+
 }

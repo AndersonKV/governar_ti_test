@@ -1,30 +1,40 @@
 package com.demo.testgovernarti;
 
+import com.demo.testgovernarti.entities.ConstructorResults;
 import com.demo.testgovernarti.entities.ConstructorStandings;
+import com.demo.testgovernarti.repository.ConstructorResultsRepository;
 import com.demo.testgovernarti.repository.ConstructorStandingsRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @Getter
 @Setter
 class RapidinhoDTO {
     private Long id;
 }
+
 @RestController
-@RequestMapping(name = "/filter")
+@RequestMapping(value = "/api/v1")
 public class TestController {
     @Autowired
     private ConstructorStandingsRepository constructorStandingsRepository;
 
+    @Autowired
+    private ConstructorResultsRepository constructorResultsRepository;
 
-    @PostMapping
-    public Optional<ConstructorStandings> test(@RequestBody RapidinhoDTO RapidinhoDTO) {
-       System.out.print(RapidinhoDTO.getId());
-        return this.constructorStandingsRepository.findById(3l);
+    @GetMapping(value = "/find_by_race_id/{id}")
+    public List<ConstructorResults> test(@PathVariable("id") Long id) {
+        List<ConstructorResults> listRace = this.constructorResultsRepository.findByRaceId(id);
+
+        if (listRace.isEmpty()) {
+            new IllegalStateException("id não encontrado");
+        }
+
+        return listRace;
 
     }
 

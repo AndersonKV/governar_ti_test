@@ -3,28 +3,35 @@ package com.demo.testgovernarti.entities;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Getter
 @Setter
+@Table(name = "constructor_results")
+@Entity
 public class ConstructorResults {
+    @Id
     private Long id;
-    private Long raceId;
-    private Long constructorId;
+    private Long race_id;
+    private Long constructor_id;
     private Double points;
     private String status;
 
     public ConstructorResults() {
      }
 
-    public ConstructorResults(Long id, Long raceId, Long constructorId, Double points, String status) {
+    public ConstructorResults(Long id, Long race_id, Long constructor_id, Double points, String status) {
         this.id = id;
-        this.raceId = raceId;
-        this.constructorId = constructorId;
+        this.race_id = race_id;
+        this.constructor_id = constructor_id;
         this.points = points;
         this.status = status;
     }
 
     @Override
     public String toString() {
-        return "ConstructorResults [id=" + this.getId() + ", raceId=" + this.getRaceId() + ", constructorId=" + this.getConstructorId() + ", points=" + this.getPoints() + ", status=" + this.getStatus()  + "]";
+        return "constructor_results [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", constructor_id=" + this.getConstructor_id() + ", points=" + this.getPoints() + ", status=" + this.getStatus()  + "]";
     }
 }

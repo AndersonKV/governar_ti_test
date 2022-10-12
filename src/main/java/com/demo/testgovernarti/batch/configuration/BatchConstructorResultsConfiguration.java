@@ -34,7 +34,7 @@
 //    @Autowired
 //    public StepBuilderFactory stepBuilderFactory;
 //
-//    @Value("${file.constructorResultsId}")
+//    @Value("${file.constructor_results}")
 //    private String fileInput;
 //
 //
@@ -43,12 +43,11 @@
 //        return new FlatFileItemReaderBuilder<ConstructorResults>().name("constructorResultsItemReader")
 //                .resource(new ClassPathResource(fileInput))
 //                .delimited()
-//                .names(new String[]{
-//                        "id",
-//                        "raceId",
-//                        "constructorId",
+//                .names("id",
+//                        "race_id",
+//                        "constructor_id",
 //                        "points",
-//                        "status"})
+//                        "status")
 //                .fieldSetMapper(new BeanWrapperFieldSetMapper<ConstructorResults>() {{
 //                    setTargetType(ConstructorResults.class);
 //                }})
@@ -64,25 +63,25 @@
 //    @Bean
 //    public JdbcBatchItemWriter<ConstructorResults> writer(DataSource dataSource) {
 //        return new JdbcBatchItemWriterBuilder<ConstructorResults>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-//                .sql("INSERT INTO constructorresults (id, raceId, constructorId, points,status) VALUES " +
-//                        "(:id, :raceId, :constructorId,:points, :status)")
+//                .sql("INSERT INTO constructor_results (id, race_id, constructor_id, points,status) VALUES " +
+//                        "(:id, :race_id, :constructor_id,:points, :status)")
 //                .dataSource(dataSource)
 //                .build();
 //    }
 //
 //    @Bean
-//    public Job importUserJobContructor(JobConstructorResultsCompletion listener, Step stepContructor) {
-//        return jobBuilderFactory.get("importUserJobContructor")
+//    public Job jobConstructorResults(JobConstructorResultsCompletion listener, Step step) {
+//        return jobBuilderFactory.get("jobConstructorResults")
 //                .incrementer(new RunIdIncrementer())
 //                .listener(listener)
-//                .flow(stepContructor)
+//                .flow(step)
 //                .end()
 //                .build();
 //    }
 //
 //    @Bean
-//    public Step stepContructor(JdbcBatchItemWriter<ConstructorResults> writer) {
-//        return stepBuilderFactory.get("stepContructor")
+//    public Step stepConstructorResults(JdbcBatchItemWriter<ConstructorResults> writer) {
+//        return stepBuilderFactory.get("stepConstructorResults")
 //                .<ConstructorResults, ConstructorResults>chunk(10)
 //                .reader(reader())
 //                .processor(processor())

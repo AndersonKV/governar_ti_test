@@ -15,7 +15,7 @@ public class CircuitItemProcessor implements ItemProcessor<Circuit, Circuit> {
 
 
         var id = circuit.getId();
-        var circuitRef = circuit.getCircuitRef();
+        var circuit_ref = circuit.getCircuit_ref();
         var name = circuit.getName();
         var location = circuit.getLocation();
         var country = circuit.getCountry();
@@ -26,7 +26,7 @@ public class CircuitItemProcessor implements ItemProcessor<Circuit, Circuit> {
 
         Circuit transformedCircuit = new Circuit(
                 id,
-                circuitRef,
+                circuit_ref,
                 name,
                 location,
                 country,

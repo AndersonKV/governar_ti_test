@@ -3,12 +3,19 @@ package com.demo.testgovernarti.entities;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Getter
 @Setter
+@Table(name = "circuit")
+@Entity
 public class Circuit {
+    @Id
     private Long id;
-    private String circuitRef;
+    private String circuit_ref;
     private String name;
     private String location;
     private String country;
@@ -23,9 +30,9 @@ public class Circuit {
 
     }
 
-    public Circuit(Long id, String circuitRef, String name, String location, String country, Double lat, Double lng, String alt, String url) {
+    public Circuit(Long id, String circuit_ref, String name, String location, String country, Double lat, Double lng, String alt, String url) {
         this.id = id;
-        this.circuitRef = circuitRef;
+        this.circuit_ref = circuit_ref;
         this.name = name;
         this.location = location;
         this.country = country;
@@ -38,7 +45,7 @@ public class Circuit {
 
     @Override
     public String toString() {
-        return "Circuit [id=" + this.getId() + ", circuitRef=" + getCircuitRef() + ", name=" + this.getName() + ", location=" + getLocation() + ", country=" + getCountry() + ", lat=" + getLat() + ", lng=" + getLng() + ", alt=" + getAlt() + ", url=" + getUrl() + "]";
+        return "circuit [id=" + this.getId() + ", circuit_ref=" + getCircuit_ref() + ", name=" + this.getName() + ", location=" + getLocation() + ", country=" + getCountry() + ", lat=" + getLat() + ", lng=" + getLng() + ", alt=" + getAlt() + ", url=" + getUrl() + "]";
     }
 }
 

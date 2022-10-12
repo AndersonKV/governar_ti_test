@@ -26,9 +26,9 @@ public class JobCircuitCompletion extends JobExecutionListenerSupport {
     @Override
     public void afterJob(JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            LOGGER.info("!!! JOB FINISHED! Time to verify the results");
+            LOGGER.info("!!! JobCircuitCompletion FINISHED! Time to verify the results");
 
-            String query = "SELECT id, circuitRef, name, location, country, lat, lng, alt, url FROM circuit";
+            String query = "SELECT id, circuit_ref, name, location, country, lat, lng, alt, url FROM circuit";
             jdbcTemplate.query(query, (rs, row) -> new Circuit(
                     rs.getLong(1),
                     rs.getString(2),

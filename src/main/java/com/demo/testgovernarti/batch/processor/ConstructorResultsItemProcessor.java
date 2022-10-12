@@ -14,8 +14,8 @@ public class ConstructorResultsItemProcessor implements ItemProcessor<Constructo
     public ConstructorResults process(ConstructorResults constructorResultsId) throws Exception {
 
         var id = constructorResultsId.getId();
-        var raceId = constructorResultsId.getRaceId();
-        var constructorId = constructorResultsId.getConstructorId();
+        var raceId = constructorResultsId.getRace_id();
+        var constructorId = constructorResultsId.getConstructor_id();
         var points = constructorResultsId.getPoints();
         var status = constructorResultsId.getStatus();
 
