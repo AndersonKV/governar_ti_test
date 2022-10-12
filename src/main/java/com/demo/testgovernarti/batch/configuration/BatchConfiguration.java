@@ -1,9 +1,6 @@
 package com.demo.testgovernarti.batch.configuration;
 
-import com.demo.testgovernarti.batch.jobCompletionNotification.JobCircuitCompletion;
-import com.demo.testgovernarti.batch.jobCompletionNotification.JobConstructorResultsCompletion;
-import com.demo.testgovernarti.batch.jobCompletionNotification.JobConstructorStandingsCompletion;
-import com.demo.testgovernarti.batch.jobCompletionNotification.JobDriverStandingsCompletion;
+import com.demo.testgovernarti.batch.jobCompletionNotification.*;
 import com.demo.testgovernarti.batch.processor.*;
 import com.demo.testgovernarti.entities.*;
 import org.springframework.batch.core.Job;
@@ -51,9 +48,12 @@ public class BatchConfiguration {
     @Value("${file.driver_standings}")
     private String fileInputDriverStandings;
 
-
     @Value("${file.drivers}")
     private String fileInputDrivers;
+
+    @Value("${file.lap_times}")
+    private String fileInputLapTimes;
+
 
     /**************************************************
      INICIO CIRCUIT
@@ -84,7 +84,9 @@ public class BatchConfiguration {
     @Bean
     public CircuitItemProcessor circuitItemProcessor() {
         return new CircuitItemProcessor();
-    };
+    }
+
+    ;
 
     @Bean
     public JdbcBatchItemWriter<Circuit> circuitItemWriter(DataSource dataSource) {
@@ -197,7 +199,6 @@ public class BatchConfiguration {
     }
 
 
-
     @Bean
     public ConstructorStandingsItemProcessor constructorStandingsItemProcessor() {
         return new ConstructorStandingsItemProcessor();
@@ -258,7 +259,6 @@ public class BatchConfiguration {
     }
 
 
-
     @Bean
     public ConstructorsItemProcessor constructorsItemProcessor() {
         return new ConstructorsItemProcessor();
@@ -294,7 +294,6 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
-
 
 
     /**************************************************
@@ -359,12 +358,11 @@ public class BatchConfiguration {
     }
 
 
-/**************************************************
+    /**************************************************
 
- INICIO DRIVERS
- **************************************************
- */
-
+     INICIO DRIVERS
+     **************************************************
+     */
 
 
     @Bean
@@ -374,7 +372,7 @@ public class BatchConfiguration {
                 .delimited()
                 .names("id", "driver_ref", "number",
                         "code", "forename", "surname", "dob",
-                        "nationality", "url" )
+                        "nationality", "url")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<Drivers>() {{
                     setTargetType(Drivers.class);
                 }})
@@ -418,10 +416,71 @@ public class BatchConfiguration {
                 .build();
     }
 
-/**************************************************
+    /**************************************************
 
- INICIO LAP_TIMES
- **************************************************
- */
+     INICIO LAP_TIMES
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<LapTimes> lapTimesItemReader() {
+        return new FlatFileItemReaderBuilder<LapTimes>().name("lapTimesItemReader")
+                .resource(new ClassPathResource(fileInputLapTimes))
+                .delimited()
+                .names("race_id",
+                        "driver_id",
+                        "lap",
+                        "position",
+                        "time",
+                        "milliseconds")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<LapTimes>() {{
+                    setTargetType(LapTimes.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public LapTimesItemProcessor lapTimesItemProcessor() {
+        return new LapTimesItemProcessor();
+    }
+
+
+    @Bean
+    public JdbcBatchItemWriter<LapTimes> lapTimesItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<LapTimes>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO lap_times (race_id, driver_id, lap, position, time, milliseconds) VALUES " +
+                        "(:race_id, :driver_id, :lap, :position, :time, :milliseconds )")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step7(JdbcBatchItemWriter<LapTimes> writer) {
+        return stepBuilderFactory.get("step7")
+                .<LapTimes, LapTimes>chunk(5000)
+                .reader(lapTimesItemReader())
+                .processor(lapTimesItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job7(JobLapTimesCompletion listener, Step step7) {
+        return jobBuilderFactory.get("job7")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step7)
+                .end()
+                .build();
+    }
+
+    /**************************************************
+
+     INICIO PIT STOP
+     **************************************************
+     */
 
 }
