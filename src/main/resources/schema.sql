@@ -21,15 +21,15 @@ create table if not exists "constructorresults"  (
     status varchar(50),
     points double precision
 );
-
-drop TABLE IF EXISTS constructor_standings;
-
-create table if not exists "constructor_standings"  (
-    id bigint,
-    raceId bigint,
-    constructorId bigint,
-    points double precision,
-    position  INTEGER,
-    positionText  varchar(50),
-    wins  INTEGER
-);
+--
+--drop TABLE IF EXISTS constructor_standings;
+--
+--create table if not exists "constructor_standings"  (
+--    id bigint,
+--    raceId bigint,
+--    constructorId bigint,
+--    points double precision,
+--    position  INTEGER,
+--    positionText  varchar(50),
+--    wins  INTEGER
+--);

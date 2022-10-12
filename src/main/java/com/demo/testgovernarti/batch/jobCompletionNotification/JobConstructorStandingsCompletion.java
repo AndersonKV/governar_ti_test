@@ -28,7 +28,7 @@ public class JobConstructorStandingsCompletion extends JobExecutionListenerSuppo
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JOB FINISHED! Time to verify the results");
 
-            String query = "SELECT id, raceId, constructorId, points, position, positionText, wins FROM constructor_standings";
+            String query = "SELECT id, race_id, constructor_id, points, position, position_text, wins FROM constructor_standings";
             jdbcTemplate.query(query, (rs, row) -> new ConstructorStandings(
                     rs.getLong(1),
                     rs.getLong(2),

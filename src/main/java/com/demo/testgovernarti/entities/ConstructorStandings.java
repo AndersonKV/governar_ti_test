@@ -2,33 +2,51 @@ package com.demo.testgovernarti.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
+@Table(name = "constructor_standings")
+@Entity
 public class ConstructorStandings {
+    @Id
     private Long id;
-    private Long raceId;
-    private Long constructorId;
+
+    private Long race_id;
+
+    private Long constructor_id;
+
     private Double points;
+
     private Integer position;
-    private String positionText;
+
+    private String position_text;
+
     private Integer wins;
 
     public ConstructorStandings() {
     }
 
-    public ConstructorStandings(Long id, Long raceId, Long constructorId, Double points, Integer position, String positionText, Integer wins) {
+    public ConstructorStandings(Long id, Long race_id, Long constructor_id, Double points, Integer position, String position_text, Integer wins) {
         this.id = id;
-        this.raceId = raceId;
-        this.constructorId = constructorId;
+        this.race_id = race_id;
+        this.constructor_id = constructor_id;
         this.points = points;
         this.position = position;
-        this.positionText = positionText;
+        this.position_text = position_text;
         this.wins = wins;
     }
 
     @Override
     public String toString() {
-        return "ConstructorStandings [id=" + this.getId() + ", raceId=" + this.getRaceId() + ", constructorId=" + this.getConstructorId() + ", points=" + this.getPoints() + ", position=" + this.getPosition()  + ", positionText=" + this.getPositionText()  + ", wins=" + this.getWins()  + "]";
+        return "constructor_standings [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", constructor_id=" + this.getConstructor_id() + ", points=" + this.getPoints() + ", position=" + this.getPosition()  + ", position_text=" + this.getPosition_text()  + ", wins=" + this.getWins()  + "]";
     }
 }
+
+

@@ -14,11 +14,11 @@ public class ConstructorStandingsItemProcessor implements ItemProcessor<Construc
     public ConstructorStandings process(ConstructorStandings constructorStandings) throws Exception {
 
         var id = constructorStandings.getId();
-        var raceId = constructorStandings.getRaceId();
-        var constructorId = constructorStandings.getConstructorId();
+        var raceId = constructorStandings.getRace_id();
+        var constructorId = constructorStandings.getConstructor_id();
         var points = constructorStandings.getPoints();
         var position = constructorStandings.getPosition();
-        var positionText = constructorStandings.getPositionText();
+        var positionText = constructorStandings.getPosition_text();
         var wins = constructorStandings.getWins();
 
         ConstructorStandings transformedCircuit = new ConstructorStandings(

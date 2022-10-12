@@ -122,7 +122,7 @@ public class BatchCircuitConfiguration {
 
 
     /*====== INICIO CONSTRUCTOR_RESULTS=======*/
-
+//
 //    @Bean
 //    public FlatFileItemReader<ConstructorResults> constructorResultsReader() {
 //        return new FlatFileItemReaderBuilder<ConstructorResults>().name("constructorResultsItemReader")
@@ -181,22 +181,20 @@ public class BatchCircuitConfiguration {
 
     /*====== FIM CONSTRUCTOR_RESULTS=======*/
 
-    /*=====INICIO CONTRUCTORSTANDINGS=======*/
+    /*=====INICIO CONSTRUCTOR_STANDINGS=======*/
 
     @Bean
     public FlatFileItemReader<ConstructorStandings> constructorStandingsReader() {
         return new FlatFileItemReaderBuilder<ConstructorStandings>().name("constructorStandingsReader")
                 .resource(new ClassPathResource(fileInputConstructorStandings))
                 .delimited()
-                .names(new String[]{
-                        "id",
-                        "raceId",
-                        "constructorId",
+                .names("id",
+                        "race_id",
+                        "constructor_id",
                         "points",
                         "position",
-                        "positionText",
-                        "wins"
-                })
+                        "position_text",
+                        "wins")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<ConstructorStandings>() {{
                     setTargetType(ConstructorStandings.class);
                 }})
@@ -214,8 +212,8 @@ public class BatchCircuitConfiguration {
     @Bean
     public JdbcBatchItemWriter<ConstructorStandings> constructorStandingsWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<ConstructorStandings>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO constructor_standings (id, raceId, constructorId, points,position, positionText, wins) VALUES " +
-                        "(:id, :raceId, :constructorId,:points, :position, :positionText, :wins)")
+                .sql("INSERT INTO constructor_standings (id, race_id, constructor_id, points,position, position_text, wins) VALUES " +
+                        "(:id, :race_id, :constructor_id,:points, :position, :position_text, :wins)")
                 .dataSource(dataSource)
                 .build();
     }
@@ -246,7 +244,9 @@ public class BatchCircuitConfiguration {
 
 
 
-//
+//    /*=====FIM CONSTRUCTOR_STANDINGS=======*/
+
+
 //    @Bean
 //    public ThreadPoolTaskExecutor taskExecutor() {
 //        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
