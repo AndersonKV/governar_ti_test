@@ -58,6 +58,10 @@ public class BatchConfiguration {
     private String fileInputPitStops;
 
 
+    @Value("${file.qualifying}")
+    private String fileInputQualifying;
+
+
     /**************************************************
      INICIO CIRCUIT
      **************************************************
@@ -487,7 +491,6 @@ public class BatchConfiguration {
      */
 
 
-
     @Bean
     public FlatFileItemReader<PitStops> pitStopsItemReader() {
         return new FlatFileItemReaderBuilder<PitStops>().name("pitStopsItemReader")
@@ -511,7 +514,6 @@ public class BatchConfiguration {
     public PitStopsItemProcessor pitStopsItemProcessor() {
         return new PitStopsItemProcessor();
     }
-
 
 
     @Bean
@@ -545,4 +547,70 @@ public class BatchConfiguration {
     }
 
 
+    /**************************************************
+
+     INICIO QUALIFYING
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<Qualifying> qualifyingItemReader() {
+        return new FlatFileItemReaderBuilder<Qualifying>().name("qualifyingItemReader")
+                .resource(new ClassPathResource(fileInputQualifying))
+                .delimited()
+                .names("id",
+                        "race_id",
+                        "driver_id",
+                        "constructor_id",
+                        "number",
+                        "position",
+                        "q1", "q2", "q3"
+                )
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Qualifying>() {{
+                    setTargetType(Qualifying.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public QualifyingItemProcessor qualifyingItemProcessor() {
+        return new QualifyingItemProcessor();
+    }
+
+
+    @Bean
+    public JdbcBatchItemWriter<Qualifying> qualifyingItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Qualifying>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO qualifying (id, race_id, driver_id, constructor_id, number, position, q1, q2, q3) VALUES " +
+                        "(:id, :race_id, :driver_id, :constructor_id, :number, :position, :q1, :q2, :q3)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step9(JdbcBatchItemWriter<Qualifying> writer) {
+        return stepBuilderFactory.get("step8")
+                .<Qualifying, Qualifying>chunk(100)
+                .reader(qualifyingItemReader())
+                .processor(qualifyingItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job9(JobLapTimesCompletion listener, Step step9) {
+        return jobBuilderFactory.get("job9")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step9)
+                .end()
+                .build();
+    }
+
+
 }
+
+
