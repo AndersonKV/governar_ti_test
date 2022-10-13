@@ -1,7 +1,6 @@
 package com.demo.testgovernarti;
 
 import com.demo.testgovernarti.entities.ConstructorResults;
-import com.demo.testgovernarti.entities.ConstructorStandings;
 import com.demo.testgovernarti.repository.ConstructorResultsRepository;
 import com.demo.testgovernarti.repository.ConstructorStandingsRepository;
 import lombok.Getter;
@@ -40,23 +39,13 @@ public class TestController {
 
 
     @GetMapping
-    public ConstructorStandings test2() {
+    public String[] test2() {
 
-        var constructorStandings = new ConstructorStandings();
-
-        var id = constructorStandings.getId();
-        var raceId = constructorStandings.getRace_id();
-        var constructorId = constructorStandings.getConstructor_id();
-        var points = constructorStandings.getPoints();
-        var position = constructorStandings.getPosition();
-        var positionText = constructorStandings.getPosition_text();
-        var wins = constructorStandings.getWins();
-
-        ConstructorStandings transformedCircuit = new ConstructorStandings(
-                id, raceId, constructorId, points, position, positionText, wins
-        );
-
-
-        return transformedCircuit;
+        return new String[]{"id",
+                "year", "round circuit_id", "name", "date",
+                "time", "url", "fp1_date", "fp1_time",
+                "fp2_date", "fp2_time", "fp3_date", "fp3_time",
+                "qualify_date", "qualify_time", "sprint_date",
+                "sprint_time"};
     }
 }

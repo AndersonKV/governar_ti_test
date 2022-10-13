@@ -23,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
 
+
 @Configuration
 @EnableBatchProcessing
 public class BatchConfiguration {
@@ -57,9 +58,24 @@ public class BatchConfiguration {
     @Value("${file.pit_stops}")
     private String fileInputPitStops;
 
-
     @Value("${file.qualifying}")
     private String fileInputQualifying;
+
+    @Value("${file.races}")
+    private String fileInputRaces;
+
+    @Value("${file.results}")
+    private String fileInputResults;
+
+    @Value("${file.seasons}")
+    private String fileInputSeasons;
+
+
+    @Value("${file.sprint_results}")
+    private String fileInputSprintResults;
+
+    @Value("${file.status}")
+    private String fileInputStatus;
 
 
     /**************************************************
@@ -546,7 +562,6 @@ public class BatchConfiguration {
                 .build();
     }
 
-
     /**************************************************
 
      INICIO QUALIFYING
@@ -610,6 +625,86 @@ public class BatchConfiguration {
                 .build();
     }
 
+
+    /**************************************************
+
+     INICIO RACES
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<Races> racesItemReader() {
+        return new FlatFileItemReaderBuilder<Races>().name("racesItemReader")
+                .resource(new ClassPathResource(fileInputRaces))
+                .delimited()
+                .names("id",
+                        "year",
+                        "round",
+                        "circuit_id",
+                        "name",
+                        "date",
+                        "time",
+                        "url",
+                        "fp1_date",
+                        "fp1_time",
+                        "fp2_date",
+                        "fp2_time",
+                        "fp3_date",
+                        "fp3_time",
+                        "qualify_date",
+                        "qualify_time",
+                        "sprint_date",
+                        "sprint_time"
+                )
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Races>() {{
+                    setTargetType(Races.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public RacesItemProcessor racesItemProcessor() {
+        return new RacesItemProcessor();
+    }
+
+
+    @Bean
+    public JdbcBatchItemWriter<Races> racesItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Races>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO races (id, year, round, circuit_id, name, date, time, " +
+                        "url, fp1_date, fp1_time, fp2_date, fp2_time," +
+                        "fp3_date, fp3_time, qualify_date, qualify_time, " +
+                        "sprint_date, sprint_time) VALUES " +
+                        "(:id, :year, :round, :circuit_id, :name, :date, :time," +
+                        ":url, :fp1_date, :fp1_time, :fp2_date, :fp2_time,"+
+                        ":fp3_date, :fp3_time, :qualify_date, :qualify_time," +
+                        ":sprint_date, :sprint_time)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step10(JdbcBatchItemWriter<Races> writer) {
+        return stepBuilderFactory.get("step10")
+                .<Races, Races>chunk(100)
+                .reader(racesItemReader())
+                .processor(racesItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job109(JobLapTimesCompletion listener, Step step10) {
+        return jobBuilderFactory.get("job10")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step10)
+                .end()
+                .build();
+    }
 
 }
 
