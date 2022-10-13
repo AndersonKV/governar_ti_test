@@ -54,6 +54,9 @@ public class BatchConfiguration {
     @Value("${file.lap_times}")
     private String fileInputLapTimes;
 
+    @Value("${file.pit_stops}")
+    private String fileInputPitStops;
+
 
     /**************************************************
      INICIO CIRCUIT
@@ -482,5 +485,64 @@ public class BatchConfiguration {
      INICIO PIT STOP
      **************************************************
      */
+
+
+
+    @Bean
+    public FlatFileItemReader<PitStops> pitStopsItemReader() {
+        return new FlatFileItemReaderBuilder<PitStops>().name("pitStopsItemReader")
+                .resource(new ClassPathResource(fileInputPitStops))
+                .delimited()
+                .names("race_id",
+                        "driver_id",
+                        "stop",
+                        "lap",
+                        "time",
+                        "duration",
+                        "milliseconds")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<PitStops>() {{
+                    setTargetType(PitStops.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public PitStopsItemProcessor pitStopsItemProcessor() {
+        return new PitStopsItemProcessor();
+    }
+
+
+
+    @Bean
+    public JdbcBatchItemWriter<PitStops> pitStopsItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<PitStops>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO pit_stops (race_id, driver_id, stop, lap, time, duration, milliseconds) VALUES " +
+                        "(:race_id, :driver_id, :stop, :lap, :time, :duration, :milliseconds)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step8(JdbcBatchItemWriter<PitStops> writer) {
+        return stepBuilderFactory.get("step8")
+                .<PitStops, PitStops>chunk(10)
+                .reader(pitStopsItemReader())
+                .processor(pitStopsItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job8(JobLapTimesCompletion listener, Step step8) {
+        return jobBuilderFactory.get("job8")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step8)
+                .end()
+                .build();
+    }
+
 
 }
