@@ -36,27 +36,4 @@ public class PitStops {
         this.milliseconds = milliseconds;
     }
 
-    public static String[] fields(){
-        return new String[] {
-                "race_id",
-                "driver_id",
-                "stop",
-                "lap",
-                "time",
-                "duration",
-                "milliseconds"
-        };
-    }
-
-    public static String[] insertFields(){
-        return new String[] {
-                ":race_id",
-                ":driver_id",
-                ":stop",
-                ":lap",
-                ":time",
-                ":duration",
-                ":milliseconds"
-        };
-    }
 }

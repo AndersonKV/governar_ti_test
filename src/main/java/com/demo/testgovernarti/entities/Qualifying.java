@@ -39,31 +39,4 @@ public class Qualifying {
         this.q3 = q3;
     }
 
-    public static String[] fields() {
-        return new String[] {
-                "id",
-                "race_id",
-                "driver_id",
-                "constructor_id",
-                "number",
-                "position",
-                "q1",
-                "q2",
-                "q3"
-        };
-    }
-
-    public static String[] insertFields() {
-        return new String[] {
-                ":id",
-                ":race_id",
-                ":driver_id",
-                ":constructor_id",
-                ":number",
-                ":position",
-                ":q1",
-                ":q2",
-                ":q3"
-        };
-    }
 }

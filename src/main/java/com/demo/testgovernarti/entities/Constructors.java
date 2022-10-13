@@ -30,23 +30,4 @@ public class Constructors {
         this.url = url;
     }
 
-    public static String[] fields() {
-        return new String[] {
-                "id",
-                "constructor_ref",
-                "name",
-                "nationality",
-                "url"
-        };
-    }
-
-    public static String[] insertFields() {
-        return new String[] {
-                ":id",
-                ":constructor_ref",
-                ":name",
-                ":nationality",
-                ":url"
-        };
-    }
 }

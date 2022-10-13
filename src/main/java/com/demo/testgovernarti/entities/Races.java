@@ -57,49 +57,5 @@ public class Races {
         this.sprint_time = sprint_time;
     }
 
-    public static String[] fields() {
-        return new String[]{
-                "id",
-                "year",
-                "round",
-                "circuit_id",
-                "name",
-                "date",
-                "time",
-                "url",
-                "fp1_date",
-                "fp1_time",
-                "fp2_date",
-                "fp2_time",
-                "fp3_date",
-                "fp3_time",
-                "qualify_date",
-                "qualify_time",
-                "sprint_date",
-                "sprint_time"
-        };
-    }
 
-    public static String[] insertFields() {
-        return new String[]{
-                ":id",
-                ":year",
-                ":round",
-                ":circuit_id",
-                ":name",
-                ":date",
-                ":time",
-                ":url",
-                ":fp1_date",
-                ":fp1_time",
-                ":fp2_date",
-                ":fp2_time",
-                ":fp3_date",
-                ":fp3_time",
-                ":qualify_date",
-                ":qualify_time",
-                ":sprint_date",
-                ":sprint_time"
-        };
-    }
 }

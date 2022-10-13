@@ -45,25 +45,5 @@ public class Drivers {
         return "drivers [id=" + this.getId() + ", driver_ref=" + this.getDriver_ref() + ", number=" + this.getNumber() + ", code=" + this.getCode() + ", forename=" + this.getForename()  + ", surname=" + this.getSurname()  + ", dob=" + this.getDob() + ", nationality=" + this.getNationality()  + ", url=" + this.getUrl() + "]";
     }
 
-    public static String[] fields() {
-        return new String[] {
-                "id", "driver_ref", "number",
-                "code", "forename", "surname", "dob",
-                "nationality", "url"
-        };
-    }
 
-    public static String[] insertFields() {
-        return new String[] {
-                ":id",
-                ":driver_ref",
-                ":number",
-                ":code",
-                ":forename",
-                ":surname",
-                ":dob",
-                ":nationality",
-                ":url"
-        };
-    }
 }

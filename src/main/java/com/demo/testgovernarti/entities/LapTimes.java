@@ -26,7 +26,7 @@ public class LapTimes {
 
     }
 
-    public LapTimes(Long race_id, Long driver_id, String lap, String position, String time, double milliseconds) {
+    public LapTimes( Long race_id, Long driver_id, String lap, String position, String time, Double milliseconds) {
         this.race_id = race_id;
         this.driver_id = driver_id;
         this.lap = lap;
@@ -34,28 +34,4 @@ public class LapTimes {
         this.time = time;
         this.milliseconds = milliseconds;
     }
-
-
-    public static String[] fields() {
-        return new String[] {
-                "race_id",
-                "driver_id",
-                "lap",
-                "position",
-                "time",
-                "milliseconds"
-        };
-    }
-
-    public static String[] insertFields() {
-        return new String[] {
-                ":race_id",
-                ":driver_id",
-                ":lap",
-                ":position",
-                ":time",
-                ":milliseconds"
-        };
-    }
-
 }

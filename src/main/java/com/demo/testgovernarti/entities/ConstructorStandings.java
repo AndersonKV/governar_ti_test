@@ -43,29 +43,6 @@ public class ConstructorStandings {
         this.wins = wins;
     }
 
-    public static String[] fields() {
-        return new String[] {
-                "id",
-                "race_id",
-                "constructor_id",
-                "points",
-                "position",
-                "position_text",
-                "wins"
-        };
-    }
-
-    public static String[] fieldsInsert() {
-        return new String[] {
-                ":id",
-                ":race_id",
-                ":constructor_id",
-                ":points",
-                ":position",
-                ":position_text",
-                ":wins"
-        };
-    }
 }
 
 

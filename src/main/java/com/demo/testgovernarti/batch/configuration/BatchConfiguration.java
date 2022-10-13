@@ -673,7 +673,7 @@ public class BatchConfiguration {
                         "fp3_date, fp3_time, qualify_date, qualify_time, " +
                         "sprint_date, sprint_time) VALUES " +
                         "(:id, :year, :round, :circuit_id, :name, :date, :time," +
-                        ":url, :fp1_date, :fp1_time, :fp2_date, :fp2_time,"+
+                        ":url, :fp1_date, :fp1_time, :fp2_date, :fp2_time," +
                         ":fp3_date, :fp3_time, :qualify_date, :qualify_time," +
                         ":sprint_date, :sprint_time)")
                 .dataSource(dataSource)
@@ -697,6 +697,143 @@ public class BatchConfiguration {
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
                 .flow(step10)
+                .end()
+                .build();
+    }
+
+
+    /**************************************************
+     INICIO RESULTS
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<Results> resultsItemReader() {
+        return new FlatFileItemReaderBuilder<Results>().name("resultsItemReader")
+                .resource(new ClassPathResource(fileInputResults))
+                .delimited()
+                .names("id",
+                        "race_id",
+                        "driver_id",
+                        "constructor_i,",
+                        "number",
+                        "grid",
+                        "position",
+                        "position_text",
+                        "position_order",
+                        "points",
+                        "laps",
+                        "time",
+                        "milliseconds",
+                        "fastest_lap",
+                        "rank",
+                        "fastest_lap_time,",
+                        "fastest_lap_speed,",
+                        "status_id"
+                )
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Results>() {{
+                    setTargetType(Results.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public ResultsItemProcessor resultsItemProcessor() {
+        return new ResultsItemProcessor();
+    }
+
+
+    @Bean
+    public JdbcBatchItemWriter<Results> resultsItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Results>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO results " +
+                        "(id, race_id, driver_id,constructor_id," +
+                        "number, grid, position, position_text," +
+                        "position_order, points, laps, time, milliseconds," +
+                        "fastest_lap, rank, fastest_lap_time," +
+                        "fastest_lap_speed, status_id) VALUES " +
+                        "(:id, :race_id,:driver_id,:constructor_id," +
+                        ":number,:grid,:position, :position_text," +
+                        ":position_order, :points, :laps, :time, :milliseconds," +
+                        ":fastest_lap, :rank, :fastest_lap_time, " +
+                        ":fastest_lap_speed, :status_id)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step11(JdbcBatchItemWriter<Results> writer) {
+        return stepBuilderFactory.get("step11")
+                .<Results, Results>chunk(270)
+                .reader(resultsItemReader())
+                .processor(resultsItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job11(JobResultCompletion listener, Step step11) {
+        return jobBuilderFactory.get("job11")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step11)
+                .end()
+                .build();
+    }
+
+    /**************************************************
+     INICIO SEASONS
+     **************************************************
+     */
+
+
+    @Bean
+    public FlatFileItemReader<Seasons> seasonsItemReader() {
+        return new FlatFileItemReaderBuilder<Seasons>().name("seasonsItemReader")
+                .resource(new ClassPathResource(fileInputSeasons))
+                .delimited()
+                .names("year", "url")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<Seasons>() {{
+                    setTargetType(Seasons.class);
+                }})
+                .build();
+    }
+
+
+    @Bean
+    public SeasonsItemProcessor seasonsItemProcessor() {
+        return new SeasonsItemProcessor();
+    }
+
+
+    @Bean
+    public JdbcBatchItemWriter<Seasons> seasonsItemWriter(DataSource dataSource) {
+        return new JdbcBatchItemWriterBuilder<Seasons>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO seasons (year, url) values (:year, :url)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    public Step step12(JdbcBatchItemWriter<Seasons> writer) {
+        return stepBuilderFactory.get("step12")
+                .<Seasons, Seasons>chunk(10)
+                .reader(seasonsItemReader())
+                .processor(seasonsItemProcessor())
+                .writer(writer)
+                .build();
+    }
+
+
+    @Bean
+    public Job job12(JobResultCompletion listener, Step step12) {
+        return jobBuilderFactory.get("job12")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step12)
                 .end()
                 .build();
     }

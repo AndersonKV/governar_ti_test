@@ -1,7 +1,7 @@
 package com.demo.testgovernarti.batch.jobCompletionNotification;
 
-import com.demo.testgovernarti.entities.Qualifying;
 import com.demo.testgovernarti.entities.Races;
+import com.demo.testgovernarti.entities.Results;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -12,35 +12,37 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobRacesCompletion extends JobExecutionListenerSupport {
+public class JobResultCompletion extends JobExecutionListenerSupport {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JobRacesCompletion.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobResultCompletion.class);
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JobRacesCompletion(JdbcTemplate jdbcTemplate) {
+    public JobResultCompletion(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            LOGGER.info("!!! JobRacesCompletion FINISHED! Time to verify the results");
+            LOGGER.info("!!! JobResultCompletion FINISHED! Time to verify the results");
 
-            String query = "SELECT id, year, round circuit_id, name, date, time, url, " +
-                    "fp1_date, fp1_time, fp2_date, fp2_time, " +
-                    "fp3_date, fp3_time, qualify_date, qualify_time, sprint_date, " +
-                    "sprint_time FROM races";
+            String query = "SELECT id, race_id, driver_id, constructor_id," +
+                    "number, grid, position, position_text, position_order," +
+                    "points, laps, time, milliseconds, fastest_lap," +
+                    "rank, fastest_lap_time, fastest_lap_speed," +
+                    "status_id FROM results";
 
-            jdbcTemplate.query(query, (rs, row) -> new Races(
+            jdbcTemplate.query(query, (rs, row) -> new Results(
                     rs.getLong(1),
-                    rs.getString(2),
-                    rs.getInt(3),
+                    rs.getLong(2),
+                    rs.getLong(3),
                     rs.getLong(4),
                     rs.getString(5),
                     rs.getString(6),
                     rs.getString(7),
+                    rs.getString(8),
                     rs.getString(9),
                     rs.getString(10),
                     rs.getString(11),
@@ -50,9 +52,8 @@ public class JobRacesCompletion extends JobExecutionListenerSupport {
                     rs.getString(15),
                     rs.getString(16),
                     rs.getString(17),
-                    rs.getString(18),
-                    rs.getString(19)
-            ))
+                    rs.getLong(18)
+             ))
                     .forEach(c -> LOGGER.info("Found < {} > in the database.", c));
         }
     }

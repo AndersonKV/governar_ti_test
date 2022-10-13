@@ -18,28 +18,20 @@ public class Circuit {
     @Id
     private Long id;
 
-    @Column(name = "circuit_ref")
     private String circuit_ref;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "location")
     private String location;
 
-    @Column(name = "country")
     private String country;
 
-    @Column(name = "lat")
     private Double lat;
 
-    @Column(name = "lng")
     private Double lng;
 
-    @Column(name = "alt")
     private String alt;
 
-    @Column(name = "url")
     private String url;
 
 

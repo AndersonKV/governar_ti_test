@@ -30,24 +30,5 @@ public class ConstructorResults {
         this.status = status;
     }
 
-    public static String[] fields() {
-        return new String[] {
-                "id",
-                "race_id",
-                "constructor_id",
-                "points",
-                "status"
-        };
-    }
-
-    public static String[] insertFields() {
-        return new String[] {
-                ":id",
-                ":race_id",
-                ":constructor_id",
-                ":points",
-                ":status"
-        };
-    }
 
 }
