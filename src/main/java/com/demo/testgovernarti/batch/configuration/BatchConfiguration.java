@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 
 @Configuration
@@ -76,7 +77,6 @@ public class BatchConfiguration {
 
     @Value("${file.status}")
     private String fileInputStatus;
-
 
     /**************************************************
      INICIO CIRCUIT
@@ -382,7 +382,6 @@ public class BatchConfiguration {
 
 
     /**************************************************
-
      INICIO DRIVERS
      **************************************************
      */
@@ -440,7 +439,6 @@ public class BatchConfiguration {
     }
 
     /**************************************************
-
      INICIO LAP_TIMES
      **************************************************
      */
@@ -501,7 +499,6 @@ public class BatchConfiguration {
     }
 
     /**************************************************
-
      INICIO PIT STOP
      **************************************************
      */
@@ -563,7 +560,6 @@ public class BatchConfiguration {
     }
 
     /**************************************************
-
      INICIO QUALIFYING
      **************************************************
      */
@@ -627,7 +623,6 @@ public class BatchConfiguration {
 
 
     /**************************************************
-
      INICIO RACES
      **************************************************
      */
@@ -697,7 +692,7 @@ public class BatchConfiguration {
 
 
     @Bean
-    public Job job109(JobLapTimesCompletion listener, Step step10) {
+    public Job job10(JobLapTimesCompletion listener, Step step10) {
         return jobBuilderFactory.get("job10")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
@@ -705,7 +700,6 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
-
 }
 
 

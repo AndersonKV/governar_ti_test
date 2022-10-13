@@ -30,9 +30,23 @@ public class Constructors {
         this.url = url;
     }
 
-    @Override
-    public String toString() {
-        return "constructors [id=" + this.getId() + ", constructor_ref=" + this.getConstructor_ref() + ", name=" + this.getName() + ", nationality=" + this.getNationality() + ", url=" + this.getUrl() + "]";
+    public static String[] fields() {
+        return new String[] {
+                "id",
+                "constructor_ref",
+                "name",
+                "nationality",
+                "url"
+        };
     }
 
+    public static String[] insertFields() {
+        return new String[] {
+                ":id",
+                ":constructor_ref",
+                ":name",
+                ":nationality",
+                ":url"
+        };
+    }
 }

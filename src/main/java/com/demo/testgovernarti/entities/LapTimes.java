@@ -35,9 +35,27 @@ public class LapTimes {
         this.milliseconds = milliseconds;
     }
 
-    @Override
-    public String toString() {
-        return "lap_times [race_id=" + this.getRace_id() + ", driver_id=" + this.getDriver_id() + ", lap=" + this.getLap() + ", position=" + this.getPosition()  + ", time=" + this.getTime()  + ", milliseconds=" + this.getMilliseconds()  + "]";
+
+    public static String[] fields() {
+        return new String[] {
+                "race_id",
+                "driver_id",
+                "lap",
+                "position",
+                "time",
+                "milliseconds"
+        };
+    }
+
+    public static String[] insertFields() {
+        return new String[] {
+                ":race_id",
+                ":driver_id",
+                ":lap",
+                ":position",
+                ":time",
+                ":milliseconds"
+        };
     }
 
 }

@@ -50,7 +50,7 @@ public class JobRacesCompletion extends JobExecutionListenerSupport {
                     rs.getString(17),
                     rs.getString(18),
                     rs.getString(19)
-                    ))
+            ))
                     .forEach(c -> LOGGER.info("Found < {} > in the database.", c));
         }
     }

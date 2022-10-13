@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
 
 
 @Getter
@@ -17,28 +18,28 @@ public class Circuit {
     @Id
     private Long id;
 
-    @Column(name="circuit_ref")
+    @Column(name = "circuit_ref")
     private String circuit_ref;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="location")
+    @Column(name = "location")
     private String location;
 
-    @Column(name="country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name="lat")
+    @Column(name = "lat")
     private Double lat;
 
-    @Column(name="lng")
+    @Column(name = "lng")
     private Double lng;
 
-    @Column(name="alt")
+    @Column(name = "alt")
     private String alt;
 
-    @Column(name="url")
+    @Column(name = "url")
     private String url;
 
 
@@ -59,10 +60,8 @@ public class Circuit {
     }
 
 
-    @Override
-    public String toString() {
-        return "circuit [id=" + this.getId() + ", circuit_ref=" + getCircuit_ref() + ", name=" + this.getName() + ", location=" + getLocation() + ", country=" + getCountry() + ", lat=" + getLat() + ", lng=" + getLng() + ", alt=" + getAlt() + ", url=" + getUrl() + "]";
-    }
+
+
 }
 
 

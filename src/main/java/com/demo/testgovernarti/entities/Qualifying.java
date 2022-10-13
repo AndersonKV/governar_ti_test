@@ -39,8 +39,31 @@ public class Qualifying {
         this.q3 = q3;
     }
 
-    @Override
-    public String toString() {
-        return "qualifying [id " + this.getId() + ", race_id=" + this.getRace_id() + ", driver_id=" + this.getDriver_id() + ", constructor_id=" + this.getConstructor_id() + ", number=" + this.getNumber()  + ", position=" + this.getPosition()  + ", q1=" + this.getQ1()  + ", q2=" + this.getQ2()  + ", q3=" + this.getQ3()  + "]";
+    public static String[] fields() {
+        return new String[] {
+                "id",
+                "race_id",
+                "driver_id",
+                "constructor_id",
+                "number",
+                "position",
+                "q1",
+                "q2",
+                "q3"
+        };
+    }
+
+    public static String[] insertFields() {
+        return new String[] {
+                ":id",
+                ":race_id",
+                ":driver_id",
+                ":constructor_id",
+                ":number",
+                ":position",
+                ":q1",
+                ":q2",
+                ":q3"
+        };
     }
 }

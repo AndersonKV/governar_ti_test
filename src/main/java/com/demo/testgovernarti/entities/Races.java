@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "races")
-public class Races  {
+public class Races {
     @Id
     private Long id;
     private String year;
@@ -57,11 +57,49 @@ public class Races  {
         this.sprint_time = sprint_time;
     }
 
-    @Override
-    public String toString() {
-        return "races [id " + this.getId() + ", year=" + this.getYear() + ", round=" + this.getRound() + ", circuit_id=" + this.getCircuit_id() +
-                ", name=" + this.getName()  + ", date=" + this.getDate()  + ", time=" + this.getTime()  + ", url=" + this.getUrl() +
-                ", fp1_date=" + this.getFp2_date()  +  ", fp1_time=" + this.getFp1_time()  +  ", fp2_date=" + this.getFp1_date()  +  ", fp2_time=" + this.getFp2_time()  +  ", fp3_date=" + this.getFp3_date()  +
-                ", fp3_time=" + this.getFp3_time()  +  ", qualify_date=" + this.getQualify_date()  +  ", qualify_time=" + this.getQualify_time()  +  ", sprint_date=" + this.getSprint_date() +  ", sprint_time=" + this.getSprint_time()  + "]";
+    public static String[] fields() {
+        return new String[]{
+                "id",
+                "year",
+                "round",
+                "circuit_id",
+                "name",
+                "date",
+                "time",
+                "url",
+                "fp1_date",
+                "fp1_time",
+                "fp2_date",
+                "fp2_time",
+                "fp3_date",
+                "fp3_time",
+                "qualify_date",
+                "qualify_time",
+                "sprint_date",
+                "sprint_time"
+        };
+    }
+
+    public static String[] insertFields() {
+        return new String[]{
+                ":id",
+                ":year",
+                ":round",
+                ":circuit_id",
+                ":name",
+                ":date",
+                ":time",
+                ":url",
+                ":fp1_date",
+                ":fp1_time",
+                ":fp2_date",
+                ":fp2_time",
+                ":fp3_date",
+                ":fp3_time",
+                ":qualify_date",
+                ":qualify_time",
+                ":sprint_date",
+                ":sprint_time"
+        };
     }
 }

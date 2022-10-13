@@ -43,9 +43,28 @@ public class ConstructorStandings {
         this.wins = wins;
     }
 
-    @Override
-    public String toString() {
-        return "constructor_standings [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", constructor_id=" + this.getConstructor_id() + ", points=" + this.getPoints() + ", position=" + this.getPosition()  + ", position_text=" + this.getPosition_text()  + ", wins=" + this.getWins()  + "]";
+    public static String[] fields() {
+        return new String[] {
+                "id",
+                "race_id",
+                "constructor_id",
+                "points",
+                "position",
+                "position_text",
+                "wins"
+        };
+    }
+
+    public static String[] fieldsInsert() {
+        return new String[] {
+                ":id",
+                ":race_id",
+                ":constructor_id",
+                ":points",
+                ":position",
+                ":position_text",
+                ":wins"
+        };
     }
 }
 

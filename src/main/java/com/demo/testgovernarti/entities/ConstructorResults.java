@@ -30,8 +30,24 @@ public class ConstructorResults {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "constructor_results [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", constructor_id=" + this.getConstructor_id() + ", points=" + this.getPoints() + ", status=" + this.getStatus()  + "]";
+    public static String[] fields() {
+        return new String[] {
+                "id",
+                "race_id",
+                "constructor_id",
+                "points",
+                "status"
+        };
     }
+
+    public static String[] insertFields() {
+        return new String[] {
+                ":id",
+                ":race_id",
+                ":constructor_id",
+                ":points",
+                ":status"
+        };
+    }
+
 }

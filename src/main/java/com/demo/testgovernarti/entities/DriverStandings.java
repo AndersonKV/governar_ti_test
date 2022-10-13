@@ -38,4 +38,28 @@ public class DriverStandings {
     public String toString() {
         return "driver_standings [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", driver_id=" + this.getDriver_id() + ", points=" + this.getPoints() + ", position=" + this.getPosition()  + ", position_text=" + this.getPosition_text()  + ", wins=" + this.getWins()  + "]";
     }
+
+    public static String[] fields() {
+        return new String[] {
+                "id",
+                "race_id",
+                "driver_id",
+                "points",
+                "position",
+                "position_text",
+                "wins"
+        };
+    }
+
+    public static String[] insertFields() {
+        return new String[] {
+                ":id",
+                ":race_id",
+                ":driver_id",
+                ":points",
+                ":position",
+                ":position_text",
+                ":wins"
+        };
+    }
 }

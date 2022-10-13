@@ -30,7 +30,7 @@ public class JobDriverStandingsCompletion extends JobExecutionListenerSupport {
             LOGGER.info("!!! JobDriverStandingsCompletion FINISHED! Time to verify the results");
 
 
-            String query = "SELECT id, race_id, driver_id, points, position, position_text, wins FROM driver_standings";
+            String query = "SELECT id, driver_ref, number, code, forename, surname, dob, nationality, url FROM drivers";
             jdbcTemplate.query(query, (rs, row) -> new DriverStandings(
                     rs.getLong(1),
                     rs.getLong(2),

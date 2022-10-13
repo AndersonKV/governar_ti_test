@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobConstructorsCompletion  extends JobExecutionListenerSupport {
+public class JobConstructorsCompletion extends JobExecutionListenerSupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobConstructorsCompletion.class);
 
