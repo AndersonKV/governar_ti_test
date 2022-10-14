@@ -16,4 +16,14 @@ spring.datasource.url=url_database
 spring.datasource.username=nome
 spring.datasource.password=senha
 
+Fiz um filtro com distinct no postegresql para poder lidar com os ids que se repetiam 
 
+1. Endpoint com pilotos que venceram ao menos 1 corrida - retorna uma lista de pilotos com filtro distinct
+http://localhost:8085/api/v1/drivers/winner/1
+
+Eu não fiz o segundo teste por que não consegui localizar na tabela essas informações
+
+3. pilotos que pilotaram pelo maior número de equipes, por ordem 
+decrescente endpoint: /drivers/teams/
+
+http://localhost:8085/api/v1/drivers/teams
