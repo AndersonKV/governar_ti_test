@@ -10,11 +10,15 @@ Ao iniciar o spring boot todos os arquivos csv são importados para o banco util
 
 Foi utilizado, jpa, lombock e postegresql</br>
 
+<b>IMPORTANTE</B>
 Em resources -> aplication.properties</br>
- 
+
+Para poder testar no banco</br>
+
 spring.datasource.url=url_database</br>
 spring.datasource.username=nome</br>
 spring.datasource.password=senha</br>
+
 
 Fiz um filtro com distinct no postegresql para poder lidar com os ids que se repetiam </br>
 
@@ -27,6 +31,8 @@ Subir uma grande quantidade de arquivos
 Não fiz o pedido 2 e 4, o 4 acho que podeira te feito, o 2 eu não compreendi mesmo,
 como considero subir os arquivos a parte mais importante do teste, não pedi ajuda, como foi me orientado, caso eu tivesse duvida, como esse final de semana vou estar ocupado, queria entregar ele logo agora.
 
+Não tive uma grande dificuldade a principio, acho que a parte mais complicada foi utilizar o spring batch, ter que criar blocos de escrita</br>
+e leitura e repetir isso umas 13 vezes foi puxado, até por que nunca tinha feito antes</br>
 
 <b>1. Endpoint com pilotos que venceram ao menos 1 corrida - retorna uma lista de pilotos com filtro distinct</br></b>
 http://localhost:8085/api/v1/drivers/winner/1</br>
