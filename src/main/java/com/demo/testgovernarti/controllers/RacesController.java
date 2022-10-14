@@ -44,32 +44,8 @@ public class RacesController {
 
     @ApiOperation(value = "should create user")
     @GetMapping(value = "races/{seasons}/{round}")
-    public ResponseEntity findRaces(@PathVariable("seasons") String seasons, @PathVariable("round") Integer round) {
+    public ResponseEntity findDriversBySeasonsAndRounds(@PathVariable("seasons") String seasons, @PathVariable("round") Integer round) {
           return this.racesFindService.findDriversBySeasonsAndRounds(seasons, round);
-        //List<DriverDTO> listDriverDTO = new ArrayList<>();
-
-        //        List<DriverStandings> listWinners = this.driverStandingsRepository.findByWins(wins);
-//
-//        listWinners.stream().forEach(listWinner -> {
-//
-//            Optional<Drivers> driver = this.driversRepository.findById(listWinner.getDriver_id());
-//
-//            DriverDTO driverDTO = new DriverDTO();
-//
-//            driverDTO.setDriver_id(driver.get().getId());
-//            driverDTO.setName(driver.get().getForename());
-//            driverDTO.setDate_of_birth(driver.get().getDob());
-//            driverDTO.setFamily_name(driver.get().getSurname());
-//            driverDTO.setWins(wins);
-//            driverDTO.setNationality(driver.get().getNationality());
-//            driverDTO.setNumber(driver.get().getNumber());
-//
-//            listDriverDTO.add(driverDTO);
-//
-//
-//        });
-//
-//        return listDriverDTO;
     }
 
 }

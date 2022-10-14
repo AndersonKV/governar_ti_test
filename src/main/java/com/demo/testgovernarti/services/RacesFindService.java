@@ -4,13 +4,9 @@ import com.demo.testgovernarti.DTO.DriverDTO;
 import com.demo.testgovernarti.DTO.DriverSeasonAndRoundDTO;
 import com.demo.testgovernarti.DTO.ListDriversDTO;
 import com.demo.testgovernarti.DTO.ListDriversSeasonAndRound;
-import com.demo.testgovernarti.entities.DriverStandings;
-import com.demo.testgovernarti.entities.Drivers;
-import com.demo.testgovernarti.entities.Races;
-import com.demo.testgovernarti.repository.CircuitRepository;
-import com.demo.testgovernarti.repository.DriverStandingsRepository;
-import com.demo.testgovernarti.repository.DriversRepository;
-import com.demo.testgovernarti.repository.RacesRepository;
+import com.demo.testgovernarti.entities.*;
+import com.demo.testgovernarti.exception.ApiRequestException;
+import com.demo.testgovernarti.repository.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,59 +33,78 @@ public class RacesFindService {
     @Autowired
     private DriversRepository driversRepository;
 
+    @Autowired
+    private ResultsRepository resultsRepository;
+
+    @Autowired
+    private ConstructorsRepository constructorsRepository;
+
 
     public ResponseEntity findDriversBySeasonsAndRounds(String season, Integer round) {
-        var races = this.racesRepository.findByYearAndRound(season, round);
-//
-//        if (races.isEmpty()) {
-//            throw new IllegalStateException("nenhum dado foi encontrado");
-//        }
+        try {
+            var races = this.racesRepository.findByYearAndRound(season, round);
 
-        var circuit = this.circuitRepository.findById(races.get().getCircuit_id());
+            if (races.isEmpty()) {
+                throw new ApiRequestException("Nenhum dado foi encontrado com esse ano e etapa");
+            }
 
-//        if (circuit.isEmpty()) {
-//            throw new IllegalStateException("circuito não encontrado");
-//        }
+            var circuit = this.circuitRepository.findById(races.get().getCircuit_id());
 
-        List<DriverStandings> listDriversStandings = this.driverStandingsRepository.findByRaceId(races.get().getId());
+            if (circuit.isEmpty()) {
+                throw new ApiRequestException("circuito não encontrado");
+            }
 
-        List<DriverSeasonAndRoundDTO> driverSeasonAndRoundDTOS = new ArrayList<>();
+            List<DriverStandings> listDriversStandings = this.driverStandingsRepository.findByRaceId(races.get().getId());
 
-        listDriversStandings.stream().forEach(driver -> {
+            List<DriverSeasonAndRoundDTO> driverSeasonAndRoundDTOS = new ArrayList<>();
 
-            Optional<Drivers> getDriver = this.driversRepository.findById(driver.getDriver_id());
+            listDriversStandings.stream().forEach(driver -> {
 
-            DriverSeasonAndRoundDTO driverDTO = new DriverSeasonAndRoundDTO();
-
-            driverDTO.setDriver_id(getDriver.get().getId());
-            driverDTO.setName(getDriver.get().getForename());
-            driverDTO.setDate_of_birth(getDriver.get().getDob());
-            driverDTO.setFamily_name(getDriver.get().getSurname());
-
-            driverDTO.setNationality(getDriver.get().getNationality());
-
-            driverSeasonAndRoundDTOS.add(driverDTO);
+                Optional<Drivers> getDriver = this.driversRepository.findById(driver.getDriver_id());
+                List<Results> results = this.resultsRepository.findByDriverId(getDriver.get().getId());
+                Optional<Constructors> constructors = this.constructorsRepository.findById(results.get(1).getDriverId());
 
 
-        });
+                DriverSeasonAndRoundDTO driverDTO = new DriverSeasonAndRoundDTO();
+
+                if (constructors.isPresent()) {
+                    driverDTO.setConstructors(constructors.get().getName());
+                    driverDTO.setNationality(getDriver.get().getNationality());
+                }
+
+                driverDTO.setDriver_id(getDriver.get().getId());
+                driverDTO.setName(getDriver.get().getForename());
+                driverDTO.setDate_of_birth(getDriver.get().getDob());
+                driverDTO.setFamily_name(getDriver.get().getSurname());
 
 
-        var listDriversSeasonAndRound = new ListDriversSeasonAndRound();
+                driverSeasonAndRoundDTOS.add(driverDTO);
 
-        listDriversSeasonAndRound.setCircuit_id(races.get().getCircuit_id());
-        listDriversSeasonAndRound.setDate(races.get().getDate());
-        listDriversSeasonAndRound.setRace_id(races.get().getId());
-        listDriversSeasonAndRound.setYear(races.get().getYear());
-        listDriversSeasonAndRound.setRace_name(races.get().getName());
-        listDriversSeasonAndRound.setRound(races.get().getRound());
-        listDriversSeasonAndRound.setCircuit_name(circuit.get().getCircuit_ref());
-        listDriversSeasonAndRound.setCountry(circuit.get().getCountry());
-        listDriversSeasonAndRound.setLocation(circuit.get().getLocation());
-        listDriversSeasonAndRound.setCircuit_name(circuit.get().getName());
-        listDriversSeasonAndRound.setCircuit_ref(circuit.get().getCircuit_ref());
+            });
 
-        listDriversSeasonAndRound.setList(driverSeasonAndRoundDTOS);
 
-        return new ResponseEntity(listDriversSeasonAndRound, HttpStatus.ACCEPTED);
+            var listDriversSeasonAndRound = new ListDriversSeasonAndRound();
+
+            listDriversSeasonAndRound.setCircuit_id(races.get().getCircuit_id());
+            listDriversSeasonAndRound.setDate(races.get().getDate());
+            listDriversSeasonAndRound.setRace_id(races.get().getId());
+            listDriversSeasonAndRound.setYear(races.get().getYear());
+            listDriversSeasonAndRound.setRace_name(races.get().getName());
+            listDriversSeasonAndRound.setRound(races.get().getRound());
+            listDriversSeasonAndRound.setCircuit_name(circuit.get().getCircuit_ref());
+            listDriversSeasonAndRound.setCountry(circuit.get().getCountry());
+            listDriversSeasonAndRound.setLocation(circuit.get().getLocation());
+            listDriversSeasonAndRound.setCircuit_name(circuit.get().getName());
+            listDriversSeasonAndRound.setCircuit_ref(circuit.get().getCircuit_ref());
+
+            listDriversSeasonAndRound.setList(driverSeasonAndRoundDTOS);
+
+            return new ResponseEntity(listDriversSeasonAndRound, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+
+        }
     }
 }
+
+//SELECT DISTINCT driver_id, constructor_id  FROM results where driver_id = 2;

@@ -15,8 +15,8 @@ public class ResultsItemProcessor implements ItemProcessor<Results, Results> {
 
         var id = results.getId();
         var race_id = results.getRace_id();
-        var driver_id = results.getDriver_id();
-        var constructor_id = results.getConstructor_id();
+        var driver_id = results.getDriverId();
+        var constructor_id = results.getConstructorId();
         var number = results.getNumber();
         var grid = results.getGrid();
         var position = results.getPosition();

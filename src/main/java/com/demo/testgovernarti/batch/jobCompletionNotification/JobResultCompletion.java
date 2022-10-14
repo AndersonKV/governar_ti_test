@@ -28,7 +28,7 @@ public class JobResultCompletion extends JobExecutionListenerSupport {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JobResultCompletion FINISHED! Time to verify the results");
 
-            String query = "SELECT id, race_id, driver_id, constructor_id," +
+            String query = "SELECT id, race_id, driverId, constructor_id," +
                     "number, grid, position, position_text, position_order," +
                     "points, laps, time, milliseconds, fastest_lap," +
                     "rank, fastest_lap_time, fastest_lap_speed," +

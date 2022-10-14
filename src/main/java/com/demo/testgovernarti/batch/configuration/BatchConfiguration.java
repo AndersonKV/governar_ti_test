@@ -23,8 +23,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
-
-
+//
+//
 //@Configuration
 //@EnableBatchProcessing
 public class BatchConfiguration {
@@ -715,8 +715,8 @@ public class BatchConfiguration {
                 .delimited()
                 .names("id",
                         "race_id",
-                        "driver_id",
-                        "constructor_i,",
+                        "driverId",
+                        "constructor_id,",
                         "number",
                         "grid",
                         "position",
@@ -749,12 +749,12 @@ public class BatchConfiguration {
     public JdbcBatchItemWriter<Results> resultsItemWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Results>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO results " +
-                        "(id, race_id, driver_id,constructor_id," +
+                        "(id, race_id, driverId,constructor_id," +
                         "number, grid, position, position_text," +
                         "position_order, points, laps, time, milliseconds," +
                         "fastest_lap, rank, fastest_lap_time," +
                         "fastest_lap_speed, status_id) VALUES " +
-                        "(:id, :race_id,:driver_id,:constructor_id," +
+                        "(:id, :race_id,:driverId,:constructor_id," +
                         ":number,:grid,:position, :position_text," +
                         ":position_order, :points, :laps, :time, :milliseconds," +
                         ":fastest_lap, :rank, :fastest_lap_time, " +

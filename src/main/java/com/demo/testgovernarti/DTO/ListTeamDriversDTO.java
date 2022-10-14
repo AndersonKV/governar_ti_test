@@ -5,11 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DriverSeasonAndRoundDTO {
+public class ListTeamDriversDTO {
     private Long driver_id;
     private String name;
     private String family_name;
     private String date_of_birth;
+    private Integer wins;
     private String nationality;
-    private String constructors;
- }
+    private String number;
+    private ListTeamDriversDTO list;
+}
