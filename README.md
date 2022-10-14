@@ -8,15 +8,15 @@ Porta 8085</br>
 
 Ao iniciar o spring boot todos os arquivos csv são importados para o banco utilizando spring batch</br>
 
-Foi utilizado, jpa, lombock e postegresql
+Foi utilizado, jpa, lombock e postegresql</br>
 
-Em resources -> aplication.properties
+Em resources -> aplication.properties</br>
  
-spring.datasource.url=url_database
-spring.datasource.username=nome
-spring.datasource.password=senha
+spring.datasource.url=url_database</br>
+spring.datasource.username=nome</br>
+spring.datasource.password=senha</br>
 
-Fiz um filtro com distinct no postegresql para poder lidar com os ids que se repetiam 
+Fiz um filtro com distinct no postegresql para poder lidar com os ids que se repetiam </br>
 
 Bom, eu considero o projeto feito, acho que pra mim a parte mais pesada foi o importe de todos os arquivos</br>
 eu nunca tinha subido tantos arquivos, foram acho que mais de 600 mil tabelas</br>
@@ -48,4 +48,8 @@ endpoint: /races/{season}/{round}</br>
 http://localhost:8085/api/v1/races/2010/5</br>
 
 Foi adicionado swagger pra facilitar o teste na api</br>
-http://localhost:8085/swagger-ui/index.html
+http://localhost:8085/swagger-ui/index.html</br>
+
+Para rodar a aplicação basta baixar o zip, abrir com intelliJ  e ele faz o resto baixando as dependencias</br>
+
+o spring ta configurado pra iniciar o importe e criar a tabela toda vez que iniciar
