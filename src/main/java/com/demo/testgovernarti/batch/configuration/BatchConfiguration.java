@@ -25,9 +25,8 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 
-//
-//@Configuration
-//@EnableBatchProcessing
+@Configuration
+@EnableBatchProcessing
 public class BatchConfiguration {
 
     @Autowired
