@@ -14,8 +14,8 @@ import javax.persistence.Table;
 public class DriverStandings {
     @Id
     private Long id;
-    private Long race_id;
-    private Long driver_id;
+    private Long raceId;
+    private Long driverId;
     private Double points;
     private Integer position;
     private String position_text;
@@ -24,20 +24,17 @@ public class DriverStandings {
     public DriverStandings() {
     }
 
-    public DriverStandings(Long id, Long race_id, Long driver_id, Double points, Integer position, String position_text, Integer wins) {
+    public DriverStandings(Long id, Long raceId, Long driverId, Double points, Integer position, String position_text, Integer wins) {
         this.id = id;
-        this.race_id = race_id;
-        this.driver_id = driver_id;
+        this.raceId = raceId;
+        this.driverId = driverId;
         this.points = points;
         this.position = position;
         this.position_text = position_text;
         this.wins = wins;
     }
 
-    @Override
-    public String toString() {
-        return "driver_standings [id=" + this.getId() + ", race_id=" + this.getRace_id() + ", driver_id=" + this.getDriver_id() + ", points=" + this.getPoints() + ", position=" + this.getPosition()  + ", position_text=" + this.getPosition_text()  + ", wins=" + this.getWins()  + "]";
-    }
+
 
 
 }

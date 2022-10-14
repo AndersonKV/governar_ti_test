@@ -16,33 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Api(value = "API REST CREATE USER")
+@Api(value = "RACES CONTROLLER")
 @RestController
 @CrossOrigin("*")
 @RequestMapping(value = "/api/v1")
 public class RacesController {
 
-//    @Autowired
-//    private ConstructorStandingsRepository constructorStandingsRepository;
-//
-//    @Autowired
-//    private ConstructorResultsRepository constructorResultsRepository;
-//
-//    @Autowired
-//    private DriverStandingsRepository driverStandingsRepository;
-//
-//    @Autowired
-//    private RacesRepository racesRepository;
-//
-//    @Autowired
-//    private DriversRepository driversRepository;
-//
-
     @Autowired
     private RacesFindService racesFindService;
 
-
-    @ApiOperation(value = "should create user")
+    @ApiOperation(value = "deve retorna uma lista de pilotos com base no ano e etapa")
     @GetMapping(value = "races/{seasons}/{round}")
     public ResponseEntity findDriversBySeasonsAndRounds(@PathVariable("seasons") String seasons, @PathVariable("round") Integer round) {
           return this.racesFindService.findDriversBySeasonsAndRounds(seasons, round);

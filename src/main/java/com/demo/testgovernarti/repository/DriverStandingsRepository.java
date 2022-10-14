@@ -10,9 +10,8 @@ import java.util.List;
 
 @Repository
 public interface DriverStandingsRepository extends JpaRepository<DriverStandings, Long> {
-    List<DriverStandings> findByWins(Integer n);
+    @Query(value = "SELECT Distinct(d.driverId) FROM DriverStandings d WHERE d.wins = ?1")
+    Long[] findByWins(Integer n);
 
-    @Query(value = "SELECT * FROM driver_standings WHERE race_id = ?1", nativeQuery = true)
     List<DriverStandings> findByRaceId(Long id);
-    //List<DriverStandings> findByWinsGreaterThanEqual(Integer n);
 }

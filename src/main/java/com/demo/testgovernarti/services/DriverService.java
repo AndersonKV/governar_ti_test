@@ -9,8 +9,6 @@ import com.demo.testgovernarti.repository.ConstructorsRepository;
 import com.demo.testgovernarti.repository.DriverStandingsRepository;
 import com.demo.testgovernarti.repository.DriversRepository;
 import com.demo.testgovernarti.repository.ResultsRepository;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-@Getter
-@Setter
-class ListConstructors {
-    private List<String> teams;
-}
 
 @Service
 public class DriverService {
@@ -43,30 +35,38 @@ public class DriverService {
 
 
     public ResponseEntity findDriverWhoWinner(Integer wins) {
-        List<DriverDTO> listDriverDTO = new ArrayList<>();
-
-        List<DriverStandings> listWinners = this.driverStandingsRepository.findByWins(wins);
-
-        listWinners.stream().forEach(listWinner -> {
-
-            Optional<Drivers> driver = this.driversRepository.findById(listWinner.getDriver_id());
-
-            DriverDTO driverDTO = new DriverDTO();
-
-            driverDTO.setDriver_id(driver.get().getId());
-            driverDTO.setName(driver.get().getForename());
-            driverDTO.setDate_of_birth(driver.get().getDob());
-            driverDTO.setFamily_name(driver.get().getSurname());
-            driverDTO.setWins(wins);
-            driverDTO.setNationality(driver.get().getNationality());
-            driverDTO.setNumber(driver.get().getNumber());
-
-            listDriverDTO.add(driverDTO);
+        try {
 
 
-        });
+            List<DriverDTO> listDriverDTO = new ArrayList<>();
 
-        return new ResponseEntity(listDriverDTO, HttpStatus.ACCEPTED);
+            var listWinners = this.driverStandingsRepository.findByWins(wins);
+
+            Arrays.stream(listWinners).forEach(listDriversStandings -> {
+
+                Optional<Drivers> driver = this.driversRepository.findById(listDriversStandings);
+
+
+                DriverDTO driverDTO = new DriverDTO();
+
+                driverDTO.setDriver_id(driver.get().getId());
+                driverDTO.setName(driver.get().getForename());
+                driverDTO.setDate_of_birth(driver.get().getDob());
+                driverDTO.setFamily_name(driver.get().getSurname());
+                driverDTO.setWins(wins);
+                driverDTO.setNationality(driver.get().getNationality());
+                driverDTO.setNumber(driver.get().getNumber());
+
+                listDriverDTO.add(driverDTO);
+
+
+            });
+
+            return new ResponseEntity(listDriverDTO, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+
+        }
     }
 
 
@@ -103,13 +103,7 @@ public class DriverService {
             });
 
 
-            //Collections.sort(listDriverDTO..getTotal(), Collections.reverseOrder());
-//            listDriverDTO.sort(Comparator.comparing(listDriverDTO::getTotal()).reversed());
-//            listDriverDTO.sort(Comparator.comparing(listDriverDTO.get().getTotal()).reversed());
-//
-
             listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
-
 
             var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
 

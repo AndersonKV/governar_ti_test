@@ -10,7 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface ConstructorResultsRepository extends JpaRepository<ConstructorResults, Long> {
-    @Query(value = "SELECT * FROM constructor_results WHERE race_id = ?1", nativeQuery = true)
-    List<ConstructorResults> findByRaceId(Long id);
-
 }

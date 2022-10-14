@@ -1,6 +1,5 @@
 package com.demo.testgovernarti.batch.processor;
 
-import com.demo.testgovernarti.entities.ConstructorStandings;
 import com.demo.testgovernarti.entities.DriverStandings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +14,8 @@ public class DriverStandingsItemProcessor implements ItemProcessor<DriverStandin
     public DriverStandings process(DriverStandings driverStandings) throws Exception {
 
         var id = driverStandings.getId();
-        var race_id = driverStandings.getRace_id();
-        var driver_id = driverStandings.getDriver_id();
+        var race_id = driverStandings.getRaceId();
+        var driver_id = driverStandings.getDriverId();
         var points = driverStandings.getPoints();
         var position = driverStandings.getPosition();
         var position_text = driverStandings.getPosition_text();

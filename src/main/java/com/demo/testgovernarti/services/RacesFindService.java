@@ -1,14 +1,10 @@
 package com.demo.testgovernarti.services;
 
-import com.demo.testgovernarti.DTO.DriverDTO;
 import com.demo.testgovernarti.DTO.DriverSeasonAndRoundDTO;
-import com.demo.testgovernarti.DTO.ListDriversDTO;
 import com.demo.testgovernarti.DTO.ListDriversSeasonAndRound;
 import com.demo.testgovernarti.entities.*;
 import com.demo.testgovernarti.exception.ApiRequestException;
 import com.demo.testgovernarti.repository.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +56,7 @@ public class RacesFindService {
 
             listDriversStandings.stream().forEach(driver -> {
 
-                Optional<Drivers> getDriver = this.driversRepository.findById(driver.getDriver_id());
+                Optional<Drivers> getDriver = this.driversRepository.findById(driver.getDriverId());
                 List<Results> results = this.resultsRepository.findByDriverId(getDriver.get().getId());
                 Optional<Constructors> constructors = this.constructorsRepository.findById(results.get(1).getDriverId());
 
@@ -107,4 +103,3 @@ public class RacesFindService {
     }
 }
 
-//SELECT DISTINCT driver_id, constructor_id  FROM results where driver_id = 2;
