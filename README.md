@@ -10,7 +10,7 @@ Ao iniciar o spring boot todos os arquivos csv são importados para o banco util
 
 Foi utilizado, jpa, lombock e postegresql</br>
 
-<b>IMPORTANTE</B>
+<b>IMPORTANTE</B></br>
 Em resources -> aplication.properties</br>
 
 Para poder testar no banco</br>
