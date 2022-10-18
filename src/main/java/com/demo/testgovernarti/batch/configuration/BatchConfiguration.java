@@ -32,9 +32,9 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 //
-@Configuration
-@EnableBatchProcessing
-@Component
+//@Configuration
+//@EnableBatchProcessing
+//@Component
 public class BatchConfiguration extends DefaultBatchConfigurer {
 
     @Override
