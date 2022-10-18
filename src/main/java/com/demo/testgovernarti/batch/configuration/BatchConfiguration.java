@@ -3,8 +3,10 @@ package com.demo.testgovernarti.batch.configuration;
 import com.demo.testgovernarti.batch.jobCompletionNotification.*;
 import com.demo.testgovernarti.batch.processor.*;
 import com.demo.testgovernarti.entities.*;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -16,18 +18,30 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
 
-
+//
 @Configuration
 @EnableBatchProcessing
-public class BatchConfiguration {
+@Component
+public class BatchConfiguration extends DefaultBatchConfigurer {
+
+    @Override
+    @Autowired(required = false)
+    public void setDataSource(@Qualifier("batchDataSource") DataSource dataSource) {
+        super.setDataSource(dataSource);
+    }
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -71,12 +85,22 @@ public class BatchConfiguration {
     @Value("${file.seasons}")
     private String fileInputSeasons;
 
-
     @Value("${file.sprint_results}")
     private String fileInputSprintResults;
 
     @Value("${file.status}")
     private String fileInputStatus;
+
+
+//    @Bean
+//    public DataSource dataSource() {
+//        HikariDataSource dataSource = new HikariDataSource();
+//        dataSource.setDriverClassName("org.h2.Driver");
+//        dataSource.setJdbcUrl("jdbc:h2:file:/users/cecil/test");
+//        dataSource.setUsername("sa");
+//        dataSource.setPassword("");
+//        return dataSource;
+//    }
 
     /**************************************************
      INICIO CIRCUIT
@@ -112,11 +136,11 @@ public class BatchConfiguration {
     ;
 
     @Bean
-    public JdbcBatchItemWriter<Circuit> circuitItemWriter(DataSource dataSource) {
+    public JdbcBatchItemWriter<Circuit> circuitItemWriter(DataSource MyDataSource) {
         return new JdbcBatchItemWriterBuilder<Circuit>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO circuit (id, circuit_ref, name,location, country, lat, lng, alt, url) VALUES " +
                         "(:id, :circuit_ref, :name,:location, :country, :lat, :lng, :alt, :url)")
-                .dataSource(dataSource)
+                .dataSource(MyDataSource)
                 .build();
     }
 
@@ -970,7 +994,6 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
-
 
 
 }

@@ -4,6 +4,7 @@ import com.demo.testgovernarti.DTO.DriverDTO;
 import com.demo.testgovernarti.DTO.ListDriversWhoHadMoreConstructorsDTO;
 import com.demo.testgovernarti.entities.DriverStandings;
 import com.demo.testgovernarti.entities.Drivers;
+import com.demo.testgovernarti.entities.Results;
 import com.demo.testgovernarti.exception.ApiRequestException;
 import com.demo.testgovernarti.repository.ConstructorsRepository;
 import com.demo.testgovernarti.repository.DriverStandingsRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Driver;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,7 @@ public class DriverService {
 
     @Autowired
     private ConstructorsRepository constructorsRepository;
+
 
 
     public ResponseEntity findDriverWhoWinner(Integer wins) {
@@ -68,6 +71,31 @@ public class DriverService {
 
         }
     }
+
+
+    public ResponseEntity driversWinsGap() {
+        try {
+            List<Results> results = new ArrayList<>();
+            List<Drivers> winners = new ArrayList<>();
+
+            for (Results result : resultsRepository.findAll()){
+                if(result.getPosition().equals("1")){
+                    var d = driversRepository.findById(result.getDriverId());
+
+                    if(d.isPresent())  winners.add(d.get());
+
+                 }
+            }
+
+            //return createWGModel(winners, results);
+           return new ResponseEntity(winners, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+
+        }
+    }
+
+
 
 
     public ResponseEntity drivenGreatestNumberTeams() {
@@ -113,7 +141,6 @@ public class DriverService {
 
         }
     }
-
 
 
 

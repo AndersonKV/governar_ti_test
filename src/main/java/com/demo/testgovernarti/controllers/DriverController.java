@@ -42,4 +42,12 @@ public class DriverController {
     public ResponseEntity drivenGreatestNumberTeams() {
         return this.driverService.drivenGreatestNumberTeams();
     }
+
+
+    @ApiOperation(value="deve retornar uma lista de pilotos com maior numero de construtores")
+    @GetMapping(value = "drivers/wins-gap")
+    public ResponseEntity driversWinsGap() {
+        return this.driverService.driversWinsGap();
+    }
+
 }
