@@ -12,10 +12,10 @@ public class SeasonsItemProcessor implements ItemProcessor<Seasons, Seasons> {
 
     @Override
     public Seasons process(Seasons seasons) throws Exception {
-        var year = seasons.getYear();
+        var year = seasons.getYears();
         var url = seasons.getUrl();
 
-        Seasons transformedSeasons = new Seasons(year, url);
+        Seasons transformedSeasons = new Seasons(year , url);
 
         LOGGER.info("Converting ( {} ) into ( {} )", seasons, transformedSeasons);
 

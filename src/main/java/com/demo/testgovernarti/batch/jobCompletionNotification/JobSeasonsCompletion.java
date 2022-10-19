@@ -28,12 +28,12 @@ public class JobSeasonsCompletion extends JobExecutionListenerSupport {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JobSeasonsCompletion FINISHED! Time to verify the results");
 
-            String query = "SELECT year, url from seasons";
+            String query = "SELECT years, url FROM seasons";
 
             jdbcTemplate.query(query, (rs, row) -> new Seasons(
                     rs.getString(1),
                     rs.getString(2)
-            ))
+             ))
                     .forEach(c -> LOGGER.info("Found < {} > in the database.", c));
         }
     }

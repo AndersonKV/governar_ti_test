@@ -4,24 +4,28 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.net.URL;
 
+
+@Getter
 @Entity
 @Table(name = "seasons")
-@Getter
 @Setter
 public class Seasons {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String year;
+    private String years;
     private String url;
 
     public Seasons() {
 
     }
 
-    public Seasons(String year, String url) {
-        this.year = year;
+
+    public Seasons(String years, String url) {
+        this.years = years;
         this.url = url;
     }
 }

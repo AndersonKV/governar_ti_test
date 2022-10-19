@@ -3,6 +3,7 @@ package com.demo.testgovernarti.controllers;
 import com.demo.testgovernarti.DTO.DriverDTO;
 import com.demo.testgovernarti.entities.DriverStandings;
 import com.demo.testgovernarti.entities.Drivers;
+import com.demo.testgovernarti.entities.Seasons;
 import com.demo.testgovernarti.repository.ConstructorResultsRepository;
 import com.demo.testgovernarti.repository.ConstructorStandingsRepository;
 import com.demo.testgovernarti.repository.DriverStandingsRepository;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,8 +41,11 @@ public class DriverController {
 
     @ApiOperation(value="deve retornar uma lista de pilotos com maior numero de construtores")
     @GetMapping(value = "drivers/teams")
-    public ResponseEntity drivenGreatestNumberTeams() {
-        return this.driverService.drivenGreatestNumberTeams();
+    public Seasons drivenGreatestNumberTeams() {
+
+
+        return new Seasons( );
+         //return this.driverService.drivenGreatestNumberTeams();
     }
 
 

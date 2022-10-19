@@ -100,42 +100,46 @@ public class DriverService {
 
     public ResponseEntity drivenGreatestNumberTeams() {
         try {
-            var listDrivers = this.driversRepository.findAll();
-            List<ListDriversWhoHadMoreConstructorsDTO> listDriverDTO = new ArrayList<>();
+           // var listDrivers = this.driversRepository.findAll();
+            var find =   this.resultsRepository.findAll();
+            var find2 =   this.resultsRepository.findAllByH2();
+            System.out.print(find + " ================");
+            System.out.print(find2.size() + " ================");
+//            List<ListDriversWhoHadMoreConstructorsDTO> listDriverDTO = new ArrayList<>();
+//
+//            List<Integer> arr2 = new ArrayList<>();
+//            //lista de pilotos
+//            listDrivers.stream().forEach(driver -> {
+//                var populateDrivers = new ListDriversWhoHadMoreConstructorsDTO();
+//
+//                populateDrivers.setName(driver.getForename());
+//                populateDrivers.setDriver_id(driver.getId());
+//                populateDrivers.setFamily_name(driver.getSurname());
+//                populateDrivers.setDate_of_birth(driver.getDob());
+//                populateDrivers.setNationality(driver.getNationality());
+//
+//                var listConstructorsFromDriver = this.resultsRepository.findConstructorsIdAndDriverId(driver.getId());
+//
+//                List<String> listNamesConstructors = new ArrayList<>();
+//                populateDrivers.setTotal(listConstructorsFromDriver.length);
+//
+//                //lista de construtores
+//                Arrays.stream(listConstructorsFromDriver).forEach(constructors -> {
+//                    var getConstructor = this.constructorsRepository.findById(constructors);
+//                    listNamesConstructors.add(getConstructor.get().getName());
+//                });
+//
+//                populateDrivers.setConstructors(listNamesConstructors);
+//
+//                listDriverDTO.add(populateDrivers);
+//            });
+//
+//
+//            listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
+//
+//            var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
 
-            List<Integer> arr2 = new ArrayList<>();
-            //lista de pilotos
-            listDrivers.stream().forEach(driver -> {
-                var populateDrivers = new ListDriversWhoHadMoreConstructorsDTO();
-
-                populateDrivers.setName(driver.getForename());
-                populateDrivers.setDriver_id(driver.getId());
-                populateDrivers.setFamily_name(driver.getSurname());
-                populateDrivers.setDate_of_birth(driver.getDob());
-                populateDrivers.setNationality(driver.getNationality());
-
-                var listConstructorsFromDriver = this.resultsRepository.findConstructorsIdAndDriverId(driver.getId());
-
-                List<String> listNamesConstructors = new ArrayList<>();
-                populateDrivers.setTotal(listConstructorsFromDriver.length);
-
-                //lista de construtores
-                Arrays.stream(listConstructorsFromDriver).forEach(constructors -> {
-                    var getConstructor = this.constructorsRepository.findById(constructors);
-                    listNamesConstructors.add(getConstructor.get().getName());
-                });
-
-                populateDrivers.setConstructors(listNamesConstructors);
-
-                listDriverDTO.add(populateDrivers);
-            });
-
-
-            listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
-
-            var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
-
-            return new ResponseEntity(firstNElementsList, HttpStatus.ACCEPTED);
+            return new ResponseEntity( HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 

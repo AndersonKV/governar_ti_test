@@ -31,11 +31,12 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.Arrays;
 
-//
 //@Configuration
 //@EnableBatchProcessing
 //@Component
 public class BatchConfiguration extends DefaultBatchConfigurer {
+
+    private Boolean item;
 
     @Override
     @Autowired(required = false)
@@ -92,15 +93,6 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     private String fileInputStatus;
 
 
-//    @Bean
-//    public DataSource dataSource() {
-//        HikariDataSource dataSource = new HikariDataSource();
-//        dataSource.setDriverClassName("org.h2.Driver");
-//        dataSource.setJdbcUrl("jdbc:h2:file:/users/cecil/test");
-//        dataSource.setUsername("sa");
-//        dataSource.setPassword("");
-//        return dataSource;
-//    }
 
     /**************************************************
      INICIO CIRCUIT
@@ -813,13 +805,12 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
      **************************************************
      */
 
-
     @Bean
     public FlatFileItemReader<Seasons> seasonsItemReader() {
         return new FlatFileItemReaderBuilder<Seasons>().name("seasonsItemReader")
                 .resource(new ClassPathResource(fileInputSeasons))
                 .delimited()
-                .names("year", "url")
+                .names("years", "url")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<Seasons>() {{
                     setTargetType(Seasons.class);
                 }})
@@ -836,7 +827,9 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     @Bean
     public JdbcBatchItemWriter<Seasons> seasonsItemWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Seasons>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO seasons (year, url) values (:year, :url)")
+                .sql("INSERT INTO seasons " +
+                        "(years, url) VALUES " +
+                        "(:years,:url)")
                 .dataSource(dataSource)
                 .build();
     }
