@@ -86,7 +86,7 @@ public class RacesFindService {
             listDriversSeasonAndRound.setRace_id(races.get().getId());
             listDriversSeasonAndRound.setYear(races.get().getYear());
             listDriversSeasonAndRound.setRace_name(races.get().getName());
-           // listDriversSeasonAndRound.setRound(String(races.get().getRound()));
+            listDriversSeasonAndRound.setRound(races.get().getRound());
             listDriversSeasonAndRound.setCircuit_name(circuit.get().getCircuit_ref());
             listDriversSeasonAndRound.setCountry(circuit.get().getCountry());
             listDriversSeasonAndRound.setLocation(circuit.get().getLocation());

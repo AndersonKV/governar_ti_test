@@ -2,6 +2,8 @@ package com.demo.testgovernarti.services;
 
 import com.demo.testgovernarti.DTO.DriverDTO;
 import com.demo.testgovernarti.DTO.ListDriversWhoHadMoreConstructorsDTO;
+import com.demo.testgovernarti.DTO.NationalityDTO;
+import com.demo.testgovernarti.DTO.ResultDriversPosition;
 import com.demo.testgovernarti.entities.DriverStandings;
 import com.demo.testgovernarti.entities.Drivers;
 import com.demo.testgovernarti.entities.Results;
@@ -34,7 +36,6 @@ public class DriverService {
 
     @Autowired
     private ConstructorsRepository constructorsRepository;
-
 
 
     public ResponseEntity findDriverWhoWinner(Integer wins) {
@@ -76,70 +77,64 @@ public class DriverService {
     public ResponseEntity driversWinsGap() {
         try {
             List<Results> results = new ArrayList<>();
-            List<Drivers> winners = new ArrayList<>();
+            List<Drivers> driversWinners = new ArrayList<>();
 
-            for (Results result : resultsRepository.findAll()){
-                if(result.getPosition().equals("1")){
-                    var d = driversRepository.findById(result.getDriverId());
+            var ListWinners = this.resultsRepository.encontrarPorPosica();
 
-                    if(d.isPresent())  winners.add(d.get());
+            //var res2 = this.resultsRepository.gtttt(res.get(0).getDriverId());
 
-                 }
-            }
+            ListWinners.stream().forEach(listWinner -> {
+                var d = new Drivers();
+                d.setId(listWinner.getDriverId());
+            });
 
-            //return createWGModel(winners, results);
-           return new ResponseEntity(winners, HttpStatus.ACCEPTED);
+            return new ResponseEntity(ListWinners, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
         }
     }
-
-
 
 
     public ResponseEntity drivenGreatestNumberTeams() {
         try {
-           // var listDrivers = this.driversRepository.findAll();
-            var find =   this.resultsRepository.findAll();
-            var find2 =   this.resultsRepository.findAllByH2();
-            System.out.print(find + " ================");
-            System.out.print(find2.size() + " ================");
-//            List<ListDriversWhoHadMoreConstructorsDTO> listDriverDTO = new ArrayList<>();
-//
-//            List<Integer> arr2 = new ArrayList<>();
-//            //lista de pilotos
-//            listDrivers.stream().forEach(driver -> {
-//                var populateDrivers = new ListDriversWhoHadMoreConstructorsDTO();
-//
-//                populateDrivers.setName(driver.getForename());
-//                populateDrivers.setDriver_id(driver.getId());
-//                populateDrivers.setFamily_name(driver.getSurname());
-//                populateDrivers.setDate_of_birth(driver.getDob());
-//                populateDrivers.setNationality(driver.getNationality());
-//
-//                var listConstructorsFromDriver = this.resultsRepository.findConstructorsIdAndDriverId(driver.getId());
-//
-//                List<String> listNamesConstructors = new ArrayList<>();
-//                populateDrivers.setTotal(listConstructorsFromDriver.length);
-//
-//                //lista de construtores
-//                Arrays.stream(listConstructorsFromDriver).forEach(constructors -> {
-//                    var getConstructor = this.constructorsRepository.findById(constructors);
-//                    listNamesConstructors.add(getConstructor.get().getName());
-//                });
-//
-//                populateDrivers.setConstructors(listNamesConstructors);
-//
-//                listDriverDTO.add(populateDrivers);
-//            });
-//
-//
-//            listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
-//
-//            var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
+            var listDrivers = this.driversRepository.findAll();
 
-            return new ResponseEntity( HttpStatus.ACCEPTED);
+            List<ListDriversWhoHadMoreConstructorsDTO> listDriverDTO = new ArrayList<>();
+
+            List<Integer> arr2 = new ArrayList<>();
+            //lista de pilotos
+            listDrivers.stream().forEach(driver -> {
+                var populateDrivers = new ListDriversWhoHadMoreConstructorsDTO();
+
+                populateDrivers.setName(driver.getForename());
+                populateDrivers.setDriver_id(driver.getId());
+                populateDrivers.setFamily_name(driver.getSurname());
+                populateDrivers.setDate_of_birth(driver.getDob());
+                populateDrivers.setNationality(driver.getNationality());
+
+                var listConstructorsFromDriver = this.resultsRepository.findConstructorsIdAndDriverId(driver.getId());
+
+                List<String> listNamesConstructors = new ArrayList<>();
+                populateDrivers.setTotal(listConstructorsFromDriver.length);
+
+                //lista de construtores
+                Arrays.stream(listConstructorsFromDriver).forEach(constructors -> {
+                    var getConstructor = this.constructorsRepository.findById(constructors);
+                    listNamesConstructors.add(getConstructor.get().getName());
+                });
+
+                populateDrivers.setConstructors(listNamesConstructors);
+
+                listDriverDTO.add(populateDrivers);
+            });
+
+
+            listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
+
+            var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
+
+            return new ResponseEntity(firstNElementsList, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
@@ -147,7 +142,28 @@ public class DriverService {
     }
 
 
+    public ResponseEntity nationalityWins() {
+        try {
+            var listDrivers = this.driversRepository.findByNationality();
+            List<NationalityDTO> listWins = new ArrayList<>();
 
+            Arrays.stream(listDrivers).forEach(e -> {
+                var count = this.driversRepository.countNationality(e);
+                listWins.add(new NationalityDTO(e, count));
+
+            });
+
+            listWins.sort(Comparator.comparing(NationalityDTO::getWins).reversed());
+
+            List<NationalityDTO> first = listWins.stream().limit(1).collect(Collectors.toList());
+
+
+            return new ResponseEntity(first, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+
+        }
+    }
 
 
 }

@@ -9,6 +9,11 @@ import java.util.List;
 
 @Repository
 public interface DriversRepository extends JpaRepository<Drivers, Long> {
-    @Query(value = "SELECT Distinct(d.nationality), d.id FROM Drivers d")
-    List findByNationality();
+
+
+    @Query(value = "SELECT Distinct(d.nationality) FROM Drivers d")
+    String[] findByNationality();
+
+    @Query("select count(d) from Drivers d where d.nationality = ?1")
+    Integer countNationality(String n);
 }
