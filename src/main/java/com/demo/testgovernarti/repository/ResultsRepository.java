@@ -27,10 +27,15 @@ public interface ResultsRepository extends CrudRepository<Results, Long> {
     //    @Query(value = " SELECT Distinct(results.driverId), position FROM results where driverId =?1", nativeQuery = true)
 //    List<Results> findFirstByPosition(Long driverId);
 //
-    @Query(value = "SELECT *  FROM results where position = '1'", nativeQuery = true)
-    List<Results> encontrarPorPosica();
+    @Query(value = " select distinct driverId, *  from results where position = '1'", nativeQuery = true)
+    List<Results> getFirstPositionOne();
+    // @Query(value = "SELECT DISTINCT driverId, race_id  from results where position = '1'", nativeQuery = true)
 
-    @Query(value = "select * from results where driverId =:driverId  AND position not like('%N%') ORDER BY `position`+0 DESC limit 1" , nativeQuery = true)
-    List<Results> gtttt(Long driverId);
+//    @Query(value = "select * from results where driverId =:driverId AND position = '1'" , nativeQuery = true)
+//    List<Results> findByDriverIdAndPositionOne(Long driverId);
+
+
+    @Query(value = "select * from results where driverId =:driverId AND position = '1'" , nativeQuery = true)
+    List<Results> findByDriverIdAndPositionOne(Long driverId);
 
 }

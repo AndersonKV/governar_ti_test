@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface RacesRepository extends JpaRepository<Races, Long> {
-    Optional<Races> findByYearAndRound(String year, Integer rounds);
+    Optional<Races> findByYearsAndRound(String year, Integer rounds);
+   // Optional<Races> find(String year, Integer rounds);
 }

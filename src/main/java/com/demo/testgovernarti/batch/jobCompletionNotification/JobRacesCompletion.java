@@ -28,10 +28,10 @@ public class JobRacesCompletion extends JobExecutionListenerSupport {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             LOGGER.info("!!! JobRacesCompletion FINISHED! Time to verify the results");
 
-            String query = "SELECT id, year, round circuit_id, name, date, time, url, " +
-                    "fp1_date, fp1_time, fp2_date, fp2_time, " +
-                    "fp3_date, fp3_time, qualify_date, qualify_time, sprint_date, " +
-                    "sprint_time FROM races";
+            String query = "SELECT id, years, round, circuitId, name, date, time, url, " +
+                    "fp1Date, fp1Time, fp2Date, fp2Time, " +
+                    "fp3Date, fp3Time, qualifyDate, qualifyTime, sprintDate, " +
+                    "sprintTime FROM races";
 
             jdbcTemplate.query(query, (rs, row) -> new Races(
                     rs.getLong(1),

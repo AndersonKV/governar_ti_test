@@ -3,9 +3,7 @@ package com.demo.testgovernarti.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "status")
@@ -16,10 +14,11 @@ public class Status {
     private Long id;
     private String status;
 
-    public Status( ) {
+    public Status() {
 
     }
-    public Status(Long id, String status) {
+
+    public Status(Long id,  String status) {
         this.id = id;
         this.status = status;
     }

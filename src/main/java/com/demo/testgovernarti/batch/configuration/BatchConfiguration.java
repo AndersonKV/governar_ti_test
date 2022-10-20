@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
-
+//
 //@Configuration
 //@EnableBatchProcessing
 //@Component
@@ -649,24 +649,10 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
         return new FlatFileItemReaderBuilder<Races>().name("racesItemReader")
                 .resource(new ClassPathResource(fileInputRaces))
                 .delimited()
-                .names("id",
-                        "year",
-                        "round",
-                        "circuit_id",
-                        "name",
-                        "date",
-                        "time",
-                        "url",
-                        "fp1_date",
-                        "fp1_time",
-                        "fp2_date",
-                        "fp2_time",
-                        "fp3_date",
-                        "fp3_time",
-                        "qualify_date",
-                        "qualify_time",
-                        "sprint_date",
-                        "sprint_time"
+                .names("id", "years", "round", "circuitId", "name", "date", "time",
+                        "url", "fp1Date", "fp1Time", "fp2Date", "fp2Time",
+                                "fp3Date", "fp3Time", "qualifyDate", "qualifyTime",
+                        "sprintDate", "sprintTime"
                 )
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<Races>() {{
                     setTargetType(Races.class);
@@ -684,14 +670,14 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     @Bean
     public JdbcBatchItemWriter<Races> racesItemWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Races>().itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO races (id, year, round, circuit_id, name, date, time, " +
-                        "url, fp1_date, fp1_time, fp2_date, fp2_time," +
-                        "fp3_date, fp3_time, qualify_date, qualify_time, " +
-                        "sprint_date, sprint_time) VALUES " +
-                        "(:id, :year, :round, :circuit_id, :name, :date, :time," +
-                        ":url, :fp1_date, :fp1_time, :fp2_date, :fp2_time," +
-                        ":fp3_date, :fp3_time, :qualify_date, :qualify_time," +
-                        ":sprint_date, :sprint_time)")
+                .sql("INSERT INTO races (id, years, round, circuitId, name, date, time, url," +
+                        "fp1Date, fp1Time, fp2Date, fp2Time,"+
+                        "fp3Date, fp3Time, qualifyDate, qualifyTime, sprintDate," +
+                        "sprintTime) VALUES " +
+                        "(:id, :years, :round, :circuitId, :name, :date, :time, :url,"+
+                        ":fp1Date, :fp1Time, :fp2Date, :fp2Time, "+
+                        ":fp3Date, :fp3Time, :qualifyDate, :qualifyTime, :sprintDate,"+
+                        ":sprintTime)")
                 .dataSource(dataSource)
                 .build();
     }

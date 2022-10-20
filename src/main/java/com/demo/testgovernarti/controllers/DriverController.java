@@ -29,14 +29,14 @@ public class DriverController {
     }
 
 
-    @ApiOperation(value="deve retornar uma lista de pilotos com maior numero de construtores")
+    @ApiOperation(value="deve retornar uma lista com 10 maiores gaps entre a primeira e ultima vitoria")
     @GetMapping(value = "drivers/wins-gap")
     public ResponseEntity driversWinsGap() {
         return this.driverService.driversWinsGap();
     }
 
 
-    @ApiOperation(value="deve retornar uma lista de pilotos com maior numero de construtores")
+    @ApiOperation(value="deve retornar o pais que mais venceu")
     @GetMapping(value = "nationalities/wins")
     public ResponseEntity nationalityWins() {
         return this.driverService.nationalityWins();

@@ -38,13 +38,13 @@ public class RacesFindService {
 
     public ResponseEntity findDriversBySeasonsAndRounds(String season, Integer round) {
         try {
-            var races = this.racesRepository.findByYearAndRound(season, round);
+            var races = this.racesRepository.findByYearsAndRound(season, round);
 
             if (races.isEmpty()) {
                 throw new ApiRequestException("Nenhum dado foi encontrado com esse ano e etapa");
             }
 
-            var circuit = this.circuitRepository.findById(races.get().getCircuit_id());
+            var circuit = this.circuitRepository.findById(races.get().getCircuitId());
 
             if (circuit.isEmpty()) {
                 throw new ApiRequestException("circuito não encontrado");
@@ -81,10 +81,10 @@ public class RacesFindService {
 
             var listDriversSeasonAndRound = new ListDriversSeasonAndRound();
 
-            listDriversSeasonAndRound.setCircuit_id(races.get().getCircuit_id());
+            listDriversSeasonAndRound.setCircuit_id(races.get().getCircuitId());
             listDriversSeasonAndRound.setDate(races.get().getDate());
             listDriversSeasonAndRound.setRace_id(races.get().getId());
-            listDriversSeasonAndRound.setYear(races.get().getYear());
+            listDriversSeasonAndRound.setYear(races.get().getYears());
             listDriversSeasonAndRound.setRace_name(races.get().getName());
             listDriversSeasonAndRound.setRound(races.get().getRound());
             listDriversSeasonAndRound.setCircuit_name(circuit.get().getCircuit_ref());
@@ -96,7 +96,6 @@ public class RacesFindService {
             listDriversSeasonAndRound.setList(driverSeasonAndRoundDTOS);
 
             return new ResponseEntity(listDriversSeasonAndRound, HttpStatus.ACCEPTED);
-            //return new ResponseEntity( HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
