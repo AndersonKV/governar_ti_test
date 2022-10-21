@@ -1,6 +1,27 @@
 # governar_ti_test
 
 
+
+
+<B>::::ATUALIZAÇÃO:::</B>
+
+no teste que entreguei ficou faltando fazer duas buscas e usar banco h2</br>
+
+2. Piloto com a maior distância entre a primeira e a última vitória</br>
+http://localhost:8085/api/v1/drivers/wins-gap</br>
+
+4. Lista de todas as nacionalidades, em ordem decrescente de vitórias</br>
+http://localhost:8085/api/v1/nationalities/wins</br>
+
+para usar o banco h2, basta ir em C:\Users\seu_usuario</br>
+
+e criar um arquivo de texto com com nome test.mv.db, é necessário</br> mudar o formato final do arquivo, às vezes você precisa habilitar a visualização da extensão, então certifique-se que o final é "test.mv.db" e não "test.mv.db.txt"
+
+</br>
+
+o username é "sa", não precisa de senha</br>
+:::::::::::::::::::::::::::::::::::::
+
 <b>Teste da governar ti concluido</b>
 
 Api feita com java 17</br>
