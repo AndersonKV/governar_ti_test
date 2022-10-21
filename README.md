@@ -7,10 +7,10 @@
 
 no teste que entreguei ficou faltando fazer duas buscas e usar banco h2</br>
 
-2. Piloto com a maior distância entre a primeira e a última vitória</br>
+2 - Piloto com a maior distância entre a primeira e a última vitória</br>
 http://localhost:8085/api/v1/drivers/wins-gap</br>
 
-4. Lista de todas as nacionalidades, em ordem decrescente de vitórias</br>
+4 - Lista de todas as nacionalidades, em ordem decrescente de vitórias</br>
 http://localhost:8085/api/v1/nationalities/wins</br>
 
 para usar o banco h2, basta ir em C:\Users\seu_usuario</br>
