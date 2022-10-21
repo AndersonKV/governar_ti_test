@@ -30,10 +30,10 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
-//
-//@Configuration
-//@EnableBatchProcessing
-//@Component
+
+@Configuration
+@EnableBatchProcessing
+@Component
 public class BatchConfiguration extends DefaultBatchConfigurer {
 
     private Boolean item;

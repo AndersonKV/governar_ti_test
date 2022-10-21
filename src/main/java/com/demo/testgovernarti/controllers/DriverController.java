@@ -36,7 +36,7 @@ public class DriverController {
     }
 
 
-    @ApiOperation(value="deve retornar o pais que mais venceu")
+    @ApiOperation(value="Lista de todas as nacionalidades, em ordem decrescente de vitórias")
     @GetMapping(value = "nationalities/wins")
     public ResponseEntity nationalityWins() {
         return this.driverService.nationalityWins();

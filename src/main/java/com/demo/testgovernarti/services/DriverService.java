@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -92,7 +93,7 @@ public class DriverService {
             // pega todas as vitorias do piloto
             distinctResultsId.stream().forEach(listWinner -> {
 
-              //  System.out.println(listWinner.getDriverId() + "id" + "\n");
+                //  System.out.println(listWinner.getDriverId() + "id" + "\n");
                 var listWithDriversWhoWon = this.resultsRepository.findByDriverIdAndPositionOne(listWinner.getDriverId());
 
                 var getDrivers = this.driversRepository.findById(listWinner.getDriverId());
@@ -136,35 +137,21 @@ public class DriverService {
                 initialListDrivers.add(driverGapDTO);
             });
 
-//            var d = initialListDrivers
-//                    .stream()
-//                    .distinct()
-//                    .collect(Collectors.toList());
 
-            //initialListDrivers.sort(Comparator.comparing(DriverGapDTO::getGap).reversed());
+            List<DriverGapDTO> item = initialListDrivers.stream().filter(this.util.distinctByKey(DriverGapDTO::getId)).collect(Collectors.toList());
 
-            //   var first = initialListDrivers.stream().limit(10).collect(Collectors.toList());
-            //var   uniqueDataList = initialListDrivers.stream().distinct().collect(Collectors.toList());
+            item.sort(Comparator.comparing(DriverGapDTO::getGap).reversed());
 
-           // List<DriverGapDTO> item = new ArrayList<>();
+             var first = item.stream().limit(10).collect(Collectors.toList());
 
-            var item =  initialListDrivers.stream().filter(distinctByKey(DriverGapDTO::getId));
-//            List<DriverGapDTO> a = (List<DriverGapDTO>) item;
-//
-//            var first = a.stream().limit(10).collect(Collectors.toList());
-
-
-            return new ResponseEntity(item, HttpStatus.ACCEPTED);
+            return new ResponseEntity(first, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
         }
     }
 
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
-    }
+
 
     public ResponseEntity drivenGreatestNumberTeams() {
         try {
@@ -172,7 +159,6 @@ public class DriverService {
 
             List<ListDriversWhoHadMoreConstructorsDTO> listDriverDTO = new ArrayList<>();
 
-            List<Integer> arr2 = new ArrayList<>();
             //lista de pilotos
             listDrivers.stream().forEach(driver -> {
                 var populateDrivers = new ListDriversWhoHadMoreConstructorsDTO();
@@ -202,9 +188,9 @@ public class DriverService {
 
             listDriverDTO.sort(Comparator.comparing(ListDriversWhoHadMoreConstructorsDTO::getTotal).reversed());
 
-            var firstNElementsList = listDriverDTO.stream().limit(10).collect(Collectors.toList());
+            List<ListDriversWhoHadMoreConstructorsDTO> firstTenElements = listDriverDTO.stream().limit(10).collect(Collectors.toList());
 
-            return new ResponseEntity(firstNElementsList, HttpStatus.ACCEPTED);
+            return new ResponseEntity(firstTenElements, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
@@ -225,10 +211,7 @@ public class DriverService {
 
             listWins.sort(Comparator.comparing(NationalityDTO::getWins).reversed());
 
-            List<NationalityDTO> first = listWins.stream().limit(1).collect(Collectors.toList());
-
-
-            return new ResponseEntity(first, HttpStatus.ACCEPTED);
+            return new ResponseEntity(listWins, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage());
 
